@@ -8,6 +8,8 @@
   <title>idiosync — plain email for Shopify</title>
   <meta name="description" content="idiosync is the most toned-down email app for Shopify. No bells, no whistles — blasts, a few automations, and a sign-up form. That's it.">
   <link rel="canonical" href="https://idiosync.site/">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
   <style>
     /* ====================================================================
        Homepage.
@@ -115,9 +117,11 @@
        it on `.site-header` instead would run it edge to edge of the
        window, which reads as a toolbar.
 
-       There is no logo file yet, so the wordmark is set type. Drop in a
-       `logo.png` and swap the <a class="brand"> text for an <img> -- see
-       CLAUDE.md.
+       The mark is the paper plane, and the wordmark stays set type beside
+       it -- the logo carries no lettering, so dropping the text would take
+       the product's name off the page. The mark is sized by height, to sit
+       with the type; the heroes site sizes its mark by width because that
+       one *is* the lettering.
        ------------------------------------------------------------------ */
     .site-header { background: var(--bg); }
     .site-header .bar {
@@ -129,10 +133,19 @@
       border-bottom: 1px solid var(--border);
     }
     .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       font-size: 1.25rem;
       font-weight: 600;
       letter-spacing: -0.02em;
       text-decoration: none;
+    }
+    .brand img {
+      display: block;
+      height: 24px;
+      width: auto;
+      filter: var(--art-filter);   /* same transparent line art as the hero */
     }
     .site-nav { display: flex; align-items: center; gap: 6px; }
     .site-nav a {
@@ -335,7 +348,10 @@
 <header class="site-header">
   <div class="wrap">
     <div class="bar">
-      <a class="brand" href="/">idiosync</a>
+      <a class="brand" href="/" aria-label="idiosync home">
+        <img src="/logo.png" alt="" width="486" height="240">
+        <span>idiosync</span>
+      </a>
       <nav class="site-nav">
         <a class="nav-text" href="#what">What it does</a>
         <a class="nav-text" href="#pricing">Pricing</a>

@@ -49,10 +49,16 @@ Freshly scaffolded. Nothing here has been reviewed by Shep yet.
   strokes on transparency, trimmed to the artwork, 1200px wide. Dark mode
   inverts it via `--art-filter` rather than shipping a second file, so any
   future art has to be transparent line work or it needs its own handling.
-- **No logo and no favicon.** The header wordmark is set type
-  (`a.brand`). When `logo.png` arrives, swap the text for an `<img>` and add
-  a `<link rel="icon">` — the heroes site sizes its header mark to the
-  artwork rather than to a ratio, so measure, don't assume.
+- **Logo is in.** `logo.png` (486×240, the plane without its trail) sits in
+  `a.brand` at 24px tall, **with the wordmark text kept beside it** — the
+  mark carries no lettering, so an image alone would take the product's
+  name off the page. Sized by height to sit with the type; the heroes site
+  sizes its mark by width because that one *is* the lettering. `favicon.png`
+  is the same mark, centred on a 180px square with 10% padding.
+- **The plane now appears twice** — header mark and hero drawing, the same
+  artwork with and without the dashed trail. Deliberate for now; if it
+  starts reading as a repeat, the hero drawing is the one to cut, not the
+  mark.
 - **No privacy policy.** The footer links `/privacy-policy.html`, which 404s.
   A Shopify app listing needs a working privacy URL, so this is a real gap
   before submission, not cosmetic.
