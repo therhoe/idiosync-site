@@ -37,8 +37,14 @@ the kind of thing the product refuses to ship. If it is, don't.
 
 Freshly scaffolded. Nothing here has been reviewed by Shep yet.
 
-- **Homepage copy is DRAFT** — headline, sub, the three card blurbs, the
-  not-list. Marked with a comment in `index.html`. Shep to redline.
+- **Headline and sub are Shep's**, redlined 2026-10-13: "An
+  under-complicated email service" / "We left the bells and the whistles at
+  home. I don't think you'll miss them." He sent the headline in Title
+  Case; it was normalized to sentence case per the Style rule below, so if
+  it ever reappears capitalized that is a deliberate reversal, not a
+  regression. The "we / I" shift in the sub is his and is kept verbatim.
+- **The three card blurbs and the not-list are still DRAFT.** Marked with a
+  comment in `index.html`. Shep to redline.
 - **Pricing is a PLACEHOLDER** (`$XX / month`) with a visible "not final"
   tag. Do NOT put a real number there until Shep confirms one. One plan is
   the stated intent; it is not yet a commitment.
