@@ -14,7 +14,14 @@ whistles, nothing but the core functions you need to do email (Shep's
 framing, 2026-10-13).
 
 That pitch constrains the site, not just the copy. **A page that oversells
-contradicts the product on sight.** Concretely, the homepage has:
+contradicts the product on sight.**
+
+As of 2026-10-13 the homepage is **one letter from Shep and one text link**.
+It is not a marketing page any more — the feature cards, the not-list and
+the pricing panel were all deleted, because the letter argues for an app you
+leave as fast as you can and a page of cards to compare would be arguing
+back. Anything you want to add has to beat *nothing*, which is a higher bar
+than it sounds. Concretely, the homepage has:
 
 - one column, and one piece of art: `paper-plane.png`, left-justified at
   half the measure in the hero. Half-width is the constraint that keeps it
@@ -29,31 +36,37 @@ contradicts the product on sight.** Concretely, the homepage has:
 - the system font stack, no webfont request — a deliberate absence, not an
   oversight. Don't add one without asking.
 - nothing animated beyond hover transitions
+- exactly two things to click in the body: the header pill and the text
+  link under the letter, both pointing at the same place. The link is a
+  text link on purpose — a second black pill under the letter would be the
+  page raising its voice the moment the writing stops.
 
 Before adding anything to this site, ask whether the thing you're adding is
 the kind of thing the product refuses to ship. If it is, don't.
 
 ## Status (2026-10-13)
 
-Freshly scaffolded. Nothing here has been reviewed by Shep yet.
+The copy is Shep's now. The scaffold's draft marketing copy is gone.
 
+- **The letter is the page.** Shep's, pasted 2026-10-13, kept verbatim apart
+  from the typo fixes listed under Style. Don't tighten it, don't break it
+  into sections, don't pull a line out as a pull-quote. The voice is the
+  pitch.
 - **Headline and sub are Shep's**, redlined 2026-10-13: "An
   under-complicated email service" / "We left the bells and the whistles at
   home. I don't think you'll miss them." He sent the headline in Title
   Case; it was normalized to sentence case per the Style rule below, so if
   it ever reappears capitalized that is a deliberate reversal, not a
   regression. The "we / I" shift in the sub is his and is kept verbatim.
-- **The three card blurbs and the not-list are still DRAFT.** Marked with a
-  comment in `index.html`. Shep to redline.
-- **Pricing is a PLACEHOLDER** (`$XX / month`) with a visible "not final"
-  tag. Do NOT put a real number there until Shep confirms one. One plan is
-  the stated intent; it is not yet a commitment.
+- **No pricing anywhere.** The placeholder panel went with the rest. The
+  letter doesn't name a price and the page no longer asks. When Shep
+  confirms a number, that is a new decision about where it goes — not a
+  matter of restoring the old panel.
 - **"Install on Shopify" links go to `#install`**, a dead anchor, because
-  the app has no App Store listing URL yet. Swap all four (header nav, hero,
-  pricing, and anywhere else they land) when the listing exists.
-- **The hero drawing is the only image.** `paper-plane.png` — black
-  strokes on transparency, trimmed to the artwork, 1200px wide. Dark mode
-  inverts it via `--art-filter` rather than shipping a second file, so any
+  the app has no App Store listing URL yet. Two places now (header pill,
+  the link under the letter); swap both when the listing exists.
+- **Two images, both line art.** `paper-plane.png` (hero, 1200px wide) and
+  `logo.png` — black strokes on transparency, trimmed to the artwork. Any
   future art has to be transparent line work or it needs its own handling.
 - **Logo is in.** `logo.png` (486×240, the plane without its trail) sits in
   `a.brand` at 24px tall, **with the wordmark text kept beside it** — the
@@ -61,7 +74,11 @@ Freshly scaffolded. Nothing here has been reviewed by Shep yet.
   name off the page. Sized by height to sit with the type; the heroes site
   sizes its mark by width because that one *is* the lettering. `favicon.png`
   is the same mark, centred on a 180px square with 10% padding.
-- **The plane now appears twice** — header mark and hero drawing, the same
+- **The header pill is the one loud thing left.** A solid black button on a
+  page that is otherwise a letter and an underline. Kept because it is the
+  only install path above the fold; worth revisiting with Shep rather than
+  quietly changing.
+- **The plane appears twice** — header mark and hero drawing, the same
   artwork with and without the dashed trail. Deliberate for now; if it
   starts reading as a repeat, the hero drawing is the one to cut, not the
   mark.
@@ -71,20 +88,22 @@ Freshly scaffolded. Nothing here has been reviewed by Shep yet.
 
 ## Pages
 
-- `index.html` — homepage, and currently the only page. Inline `<style>`
-  with the token block at the top. Sections: hero, "what it does" (three
-  cards), "what it doesn't do" (the not-list), pricing.
+- `index.html` — homepage, and the only page. Inline `<style>` with the
+  token block at the top. Sections: hero (drawing, headline, sub), the
+  letter, the install link, footer.
 
-The **not-list** is the actual pitch — every feature the app refuses to
-ship, named out loud. Keep it specific. The moment one of those features
-actually ships, it comes off the list; a stale not-list is worse than no
-not-list.
+The letter runs at a 62ch measure in `.letter` and is set a notch larger
+than body copy — this is reading, not scanning. Shep's one-line beats
+("Together.") are their own `<p>`, not `<br>`s, so they keep their air on a
+phone.
 
 ## Design tokens
 
 Lifted from the app UI (`~/idio UI/index.html`) so the site and the app read
-as one thing: Shopify-adjacent greys, #303030 ink, 12px radius, the hairline
-two-layer shadow.
+as one thing: Shopify-adjacent greys, #303030 ink. The shadow and
+status-colour tokens went unused when the cards and the pricing panel were
+deleted, and were removed with them — pull them back off the app UI if
+something ever needs them again.
 
 **This site is light only. The page is white, everywhere, on every
 machine.** (Shep's call, 2026-10-13 — stated twice; the scaffold shipped
@@ -135,3 +154,13 @@ is Claude's job, every time.
 breaks the meaning. Do NOT "fix" grammatical quirks that could be
 deliberate, or creative spellings — when in doubt, keep it verbatim and
 flag it instead.
+
+What that meant for the letter (2026-10-13), as a worked example. Fixed:
+"Now we like marketing toddlers" → "we're like"; "enable and automation" →
+"an automation"; "conquereed" → "conquered"; "some times" → "sometimes";
+"customers buttons" → "customers' buttons"; "meta" → "Meta" and "claude or
+chatgpt" → "Claude or ChatGPT" (companies and products — and lowercase
+"meta" reads as the adjective); "Idiosync" → "idiosync" per the brand rule.
+Left alone: "koolaid", "agentic whats-its", "blast a blast", "f***", the
+fragment "If I forgot something.", and the "we / I" shifts. Those are
+voice.

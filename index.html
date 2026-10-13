@@ -15,19 +15,24 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <style>
     /* ====================================================================
-       Homepage.
+       Homepage. One drawing, one headline, one piece of writing, one link.
 
-       The pitch is restraint -- the most toned-down email app for Shopify --
-       so the page has to behave the same way. One column, one accent, no
-       illustration, no font request, nothing that moves. A site that
-       oversells would contradict the product on sight.
+       The page used to be a marketing site -- feature cards, a not-list, a
+       pricing panel. Shep replaced all of it with the letter below, and the
+       letter is the whole argument: an app you leave as fast as you can.
+       A page that then asked you to compare three cards and a price would
+       be arguing with it. So there is nothing here to click except the one
+       link that does the thing.
+
+       Keep it that way. A section added to this page has to beat "nothing",
+       which is a higher bar than it sounds.
 
        Tokens are lifted from the app UI (`idio UI/index.html`) so the site
-       and the app read as one thing: Shopify-adjacent greys, #303030 ink,
-       12px radius, the hairline shadow. The app's dark half did NOT come
-       with them -- this page is white, full stop, and the drawings are
-       black line art that only works on white. Don't reintroduce a
-       `prefers-color-scheme` block without new artwork to go with it.
+       and the app read as one thing: Shopify-adjacent greys, #303030 ink.
+       The app's dark half did NOT come with them -- this page is white,
+       full stop, and the drawings are black line art that only works on
+       white. Don't reintroduce a `prefers-color-scheme` block without new
+       artwork to go with it.
 
        Type is the system stack on purpose -- no webfont, no preconnect, no
        flash of unstyled text. Swap in a webfont only if the brand needs
@@ -48,9 +53,6 @@
                                   There is no brand colour yet and the page
                                   does not need one. */
       --ink-text: #ffffff;
-      --pos-bg: #cdfee1;
-      --pos-text: #0c5132;
-      --shadow: 0 1px 0 rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.05);
       --radius: 12px;
 
       --maxw: 1040px;
@@ -58,6 +60,7 @@
       --control-height: 44px;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -69,27 +72,24 @@
       -webkit-font-smoothing: antialiased;
     }
     p { margin: 0 0 16px; }
-    ul { list-style: none; margin: 0; padding: 0; }
     a { color: inherit; }
     .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
 
     /* --- header --------------------------------------------------------
-       Wordmark left, nav + pill right, on one row at a shared control
-       height. Not sticky: nothing here is urgent enough to follow you down
-       the page.
+       Wordmark left, the install pill right. Not sticky: nothing here is
+       urgent enough to follow you down the page.
 
        The header is the same white as the page -- no bar, no fill, just a
        rule. That rule lives on `.bar`, inside the wrap's gutter, so it
-       starts and stops exactly where the headline below it does. Putting
-       it on `.site-header` instead would run it edge to edge of the
-       window, which reads as a toolbar.
+       starts and stops exactly where the writing below it does. Putting it
+       on `.site-header` instead would run it edge to edge of the window,
+       which reads as a toolbar.
 
        The mark is the paper plane (same line art as the hero), and the
-       wordmark stays set type beside
-       it -- the logo carries no lettering, so dropping the text would take
-       the product's name off the page. The mark is sized by height, to sit
-       with the type; the heroes site sizes its mark by width because that
-       one *is* the lettering.
+       wordmark stays set type beside it -- the logo carries no lettering,
+       so dropping the text would take the product's name off the page. The
+       mark is sized by height, to sit with the type; the heroes site sizes
+       its mark by width because that one *is* the lettering.
        ------------------------------------------------------------------ */
     .site-header { background: var(--bg); }
     .site-header .bar {
@@ -114,32 +114,24 @@
       height: 24px;
       width: auto;
     }
-    .site-nav { display: flex; align-items: center; gap: 6px; }
-    .site-nav a {
+    .site-nav a.cta {
       display: inline-flex;
       align-items: center;
       height: var(--control-height);
-      padding: 0 14px;
+      padding: 0 18px;
       border-radius: 8px;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 0.95rem;
-      white-space: nowrap;   /* a multi-word pill wraps to two lines and
-                                breaks the header's single row */
-      transition: color .15s ease, background-color .15s ease;
-    }
-    .site-nav a:hover { background: var(--surface-sub); }
-    .site-nav a.cta {
       color: var(--ink-text);
       background: var(--ink);
-      padding: 0 18px;
+      text-decoration: none;
+      font-size: 0.95rem;
       font-weight: 500;
+      white-space: nowrap;   /* a multi-word pill wraps to two lines and
+                                breaks the header's single row */
+      transition: opacity .15s ease;
     }
-    .site-nav a.cta:hover { color: var(--ink-text); opacity: .85; }
+    .site-nav a.cta:hover { opacity: .85; }
 
     /* --- hero ----------------------------------------------------------
-       One column, left-aligned, capped at a readable measure.
-
        Asset paths here are relative (`paper-plane.png`, not
        `/paper-plane.png`) so the page also renders when it is opened
        straight off disk, which is how the file usually gets eyeballed. The
@@ -174,143 +166,56 @@
       color: var(--text-sub);
       line-height: 1.55;
     }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0 0; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      height: var(--control-height);
-      padding: 0 20px;
-      border-radius: 8px;
-      border: 1px solid var(--border-strong);
-      background: var(--surface);
-      font-size: 0.95rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: background-color .15s ease, opacity .15s ease;
-    }
-    .btn:hover { background: var(--surface-sub); }
-    .btn-solid { background: var(--ink); color: var(--ink-text); border-color: var(--ink); }
-    .btn-solid:hover { background: var(--ink); opacity: .85; }
 
-    /* --- sections --- */
-    .section { padding-block: 80px 0; }
-    .section-head { margin: 0 0 24px; }
-    .section-head h2 {
-      margin: 0 0 6px;
-      font-size: clamp(1.4rem, 2.4vw, 1.9rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-    .section-head .eyebrow {
-      display: block;
-      margin: 0 0 10px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-    }
-    .section-head p { max-width: 60ch; color: var(--text-sub); margin: 0; }
+    /* --- the letter ----------------------------------------------------
+       Narrower than the hero on purpose: this is reading, not scanning, so
+       it gets a measure you can actually track across -- about 62
+       characters. Slightly larger type and a looser leading than the rest
+       of the page for the same reason.
 
-    /* --- cards ---------------------------------------------------------
-       Three, because there are three things in the app. If a fourth card
-       ever shows up, that is worth a conversation about scope rather than
-       a grid change.
+       The one-line paragraphs ("Together.") are Shep's beats. They are
+       paragraphs, not <br>s, so they keep their air on a phone.
        ------------------------------------------------------------------ */
-    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .card {
-      padding: 24px;
-      border-radius: var(--radius);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+    .letter { padding-block: 72px 0; }
+    .letter p {
+      max-width: 62ch;
+      margin: 0 0 22px;
+      font-size: 1.0625rem;
+      line-height: 1.72;
     }
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-    .card p { margin: 0; color: var(--text-sub); font-size: 0.95rem; }
+    .letter .signoff { margin-top: 34px; color: var(--text-sub); }
 
-    /* --- the not-list --------------------------------------------------
-       The actual pitch. Everything the app refuses to do, named out loud.
-       Keep it specific and keep it honest -- the moment one of these ships,
-       it comes off the list.
+    /* --- the one link --------------------------------------------------
+       A text link, not a button. The letter's whole case is that the app
+       asks almost nothing of you; a second black pill underneath it would
+       be the page raising its voice at the exact moment the writing stops.
        ------------------------------------------------------------------ */
-    .notlist {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0 32px;
-      margin: 0;
-      padding: 8px 0 0;
+    .install {
+      padding-block: 10px 0;
+      font-size: 1.0625rem;
     }
-    .notlist li {
-      padding: 12px 0 12px 26px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      color: var(--text-sub);
-    }
-    .notlist li::before {
-      content: "";
-      position: absolute;
-      left: 2px;
-      top: 50%;
-      width: 12px;
-      height: 1px;
-      background: var(--border-strong);
-    }
-
-    /* --- pricing -------------------------------------------------------
-       PLACEHOLDER. No numbers here are real -- see CLAUDE.md before
-       putting one in.
-       ------------------------------------------------------------------ */
-    .pricing {
-      margin: 8px 0 0;
-      padding: 32px;
-      border-radius: var(--radius);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      max-width: 520px;
-    }
-    .pricing .amount { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
-    .pricing .per { color: var(--text-dim); font-size: 1rem; font-weight: 400; }
-    .pricing .tag {
-      display: inline-block;
-      margin: 0 0 14px;
-      padding: 2px 10px;
-      border-radius: 999px;
-      background: var(--pos-bg);
-      color: var(--pos-text);
-      font-size: 0.78rem;
+    .install a {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
       font-weight: 500;
     }
-    .pricing p { margin: 14px 0 0; color: var(--text-sub); font-size: 0.95rem; }
+    .install a:hover { text-decoration-thickness: 2px; }
 
     footer {
       margin: 96px 0 0;
       padding: 28px 0 48px;
       border-top: 1px solid var(--border);
-      background: var(--surface);
       color: var(--text-dim);
       font-size: 0.9rem;
     }
     footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
     footer a { text-decoration: underline; text-underline-offset: 3px; }
 
-    @media (max-width: 860px) {
-      .cards { grid-template-columns: minmax(0, 1fr); }
-      .notlist { grid-template-columns: minmax(0, 1fr); gap: 0; }
-    }
     @media (max-width: 600px) {
       :root { --gutter: 18px; }
       .hero { padding-top: 56px; }
-      .section { padding-top: 56px; }
-      /* The text links cannot share the row with the wordmark and the pill
-         at this width, so they drop and only the pill stays. */
-      .site-nav .nav-text { display: none; }
-      .pricing { padding: 24px; }
+      .letter { padding-top: 56px; }
     }
   </style>
 </head>
@@ -324,8 +229,6 @@
         <span>idiosync</span>
       </a>
       <nav class="site-nav">
-        <a class="nav-text" href="#what">What it does</a>
-        <a class="nav-text" href="#pricing">Pricing</a>
         <a class="cta" href="#install">Install on Shopify</a>
       </nav>
     </div>
@@ -334,8 +237,7 @@
 
 <main>
 
-  <!-- Headline and sub are Shep's, redlined 2026-10-13. The three card
-       blurbs and the not-list are still DRAFT. -->
+  <!-- Headline and sub are Shep's, redlined 2026-10-13. -->
   <section class="hero wrap">
     <div class="hero-art">
       <img src="paper-plane.png" width="1200" height="830"
@@ -343,68 +245,49 @@
     </div>
     <h1>An under-complicated email service</h1>
     <p class="sub">We left the bells and the whistles at home. I don't think you'll miss them.</p>
-    <div class="hero-actions">
-      <a class="btn btn-solid" href="#install">Install on Shopify</a>
-      <a class="btn" href="#what">See what it does</a>
-    </div>
   </section>
 
-  <section class="section wrap" id="what">
-    <div class="section-head">
-      <span class="eyebrow">What it does</span>
-      <h2>Three things.</h2>
-      <p>Each one does the obvious thing in the obvious place. There is no second way to do any of them.</p>
-    </div>
-    <div class="cards">
-      <article class="card">
-        <h3>Blasts</h3>
-        <p>Write it, pick who gets it, send it. Schedule it if you want. No template gallery to get lost in.</p>
-      </article>
-      <article class="card">
-        <h3>Automations</h3>
-        <p>Welcome, abandoned cart, post-purchase. The three that actually earn their keep, set up in a minute each.</p>
-      </article>
-      <article class="card">
-        <h3>Sign-up form</h3>
-        <p>One form, one popup, your list grows. No targeting rules, no exit-intent, no spin-to-win.</p>
-      </article>
-    </div>
+  <!-- Shep's letter, 2026-10-13. This is the page; it replaced the feature
+       cards, the not-list and the pricing panel.
+
+       Kept verbatim except for outright typos (see CLAUDE.md for the list).
+       Do not tighten it, do not break it into sections, do not pull a line
+       out as a pull-quote. The voice is the product pitch. -->
+  <section class="letter wrap">
+    <p>There is a lot of emphasis put on “doing things professionally” which was fine when “professionally” wasn’t strictly attached to over-complicated software.</p>
+
+    <p>We used to craft marketing campaigns and hold our breath as it launched. Now we argue over how many creatives it takes for Meta to change a lightbulb.</p>
+
+    <p>We used to write letters with words that we strung together. Now we’re like marketing toddlers playing with our toy blocks and crying when Outlook walks over and knocks it down.</p>
+
+    <p>We used to try really hard to build the best websites. Now we find ourselves swimming in the spittle of the talking heads who can’t stop drooling over agentic whats-its.</p>
+
+    <p>Now I’d like to claw some of that back.</p>
+
+    <p>Together.</p>
+
+    <p>In an attempt to cut down on button pushing and learn what pushes your customers’ buttons, we stripped everything that is unnecessary to sending and delivering an email out of idiosync.</p>
+
+    <p>That means it might suck sometimes, but it won’t suck your time.</p>
+
+    <p>You might pin it down as just the infrastructure of an email app. And that is fair. It is that. There is no visual builder so you have to paste your HTML email into the editor. But we are all drinking the AI koolaid right now, so have a sip while Claude or ChatGPT whips up your email in HTML. And then you…</p>
+
+    <p>Oh, you can send a test email… and then you blast a blast or enable an automation.</p>
+
+    <p>And then you get the f*** out of there. There is nothing else to do. Take a lap. You’ve conquered the world.</p>
+
+    <p>Call us, we will have a virtual beer together.</p>
+
+    <p>I think that is all. If I forgot something. Consider it’s hanging out with the bells and the whistles…</p>
+
+    <p class="signoff">— Shep</p>
   </section>
 
-  <section class="section wrap">
-    <div class="section-head">
-      <span class="eyebrow">What it doesn't do</span>
-      <h2>On purpose.</h2>
-      <p>Everything below is something other email apps charge you for and you have never once opened. If any of it ships, it comes off this list.</p>
-    </div>
-    <ul class="notlist">
-      <li>AI subject-line suggestions</li>
-      <li>Visual journey builders</li>
-      <li>Predictive send-time optimization</li>
-      <li>Lead scoring</li>
-      <li>Template marketplaces</li>
-      <li>Spin-to-win popups</li>
-      <li>SMS, push, and direct mail</li>
-      <li>A dashboard you have to interpret</li>
-    </ul>
-  </section>
-
-  <section class="section wrap" id="pricing">
-    <div class="section-head">
-      <span class="eyebrow">Pricing</span>
-      <h2>One plan.</h2>
-      <p>Because two plans means a feature someone is being kept away from.</p>
-    </div>
-    <!-- PLACEHOLDER PRICE — not a real number. Do not publish until Shep
-         confirms it. See CLAUDE.md. -->
-    <div class="pricing">
-      <span class="tag">Placeholder — not final</span>
-      <div class="amount">$XX<span class="per"> / month</span></div>
-      <p>Everything in the app, every month. Cancel from inside Shopify.</p>
-      <div class="hero-actions">
-        <a class="btn btn-solid" href="#install">Install on Shopify</a>
-      </div>
-    </div>
+  <!-- DEAD ANCHOR — `#install` goes nowhere until the app has an App Store
+       listing URL. Two places point at it: this link and the header pill.
+       See CLAUDE.md. -->
+  <section class="install wrap">
+    <a href="#install">Install idiosync on Shopify</a>
   </section>
 
 </main>
@@ -412,11 +295,7 @@
 <footer>
   <div class="wrap">
     <span>&copy; 2026 idiosync</span>
-    <span>
-      <a href="#what">What it does</a> &middot;
-      <a href="#pricing">Pricing</a> &middot;
-      <a href="/privacy-policy.html">Privacy</a>
-    </span>
+    <span><a href="/privacy-policy.html">Privacy</a></span>
   </div>
 </footer>
 
