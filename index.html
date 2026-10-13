@@ -8,8 +8,8 @@
   <title>idiosync — plain email for Shopify</title>
   <meta name="description" content="idiosync is the most toned-down email app for Shopify. No bells, no whistles — blasts, a few automations, and a sign-up form. That's it.">
   <link rel="canonical" href="https://idiosync.site/">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
   <style>
     /* ====================================================================
        Homepage.
@@ -172,6 +172,11 @@
 
     /* --- hero ----------------------------------------------------------
        One column, left-aligned, capped at a readable measure.
+
+       Asset paths here are relative (`paper-plane.png`, not
+       `/paper-plane.png`) so the page also renders when it is opened
+       straight off disk, which is how the file usually gets eyeballed. The
+       heroes site does the same.
 
        The drawing is a hand-drawn paper plane -- left-justified at half the
        measure, not a banner. Half-width is the whole point: a mark the
@@ -349,7 +354,7 @@
   <div class="wrap">
     <div class="bar">
       <a class="brand" href="/" aria-label="idiosync home">
-        <img src="/logo.png" alt="" width="486" height="240">
+        <img src="logo.png" alt="" width="486" height="240">
         <span>idiosync</span>
       </a>
       <nav class="site-nav">
@@ -367,7 +372,7 @@
        blurbs and the not-list. Everything else here is structure. -->
   <section class="hero wrap">
     <div class="hero-art">
-      <img src="/paper-plane.png" width="1200" height="830"
+      <img src="paper-plane.png" width="1200" height="830"
            alt="A hand-drawn paper plane, with a dashed line trailing behind it.">
     </div>
     <h1>Email for Shopify, with everything else taken out.</h1>
