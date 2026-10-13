@@ -78,12 +78,17 @@ not-list.
 
 Lifted from the app UI (`~/idio UI/index.html`) so the site and the app read
 as one thing: Shopify-adjacent greys, #303030 ink, 12px radius, the hairline
-two-layer shadow. **Both halves of the app's theme came with them — this
-site has dark mode**, via `prefers-color-scheme` guarded with
-`:root:not([data-theme="light"])` plus a `:root[data-theme="dark"]` block.
-Any new page or stylesheet redefines every token in all three places or it
-will break in dark mode. (This is the one place idiosync.site differs from
-the heroes site, which is light-only.)
+two-layer shadow.
+
+**This site is light only. The page is white, everywhere, on every
+machine.** (Shep's call, 2026-10-13 — stated twice; the scaffold shipped
+the app's dark half with the tokens and it was wrong.) There is one `:root`
+block, `<meta name="color-scheme" content="light">`, and no
+`prefers-color-scheme` anywhere. Same as the heroes site.
+
+Do not reintroduce a dark theme. The drawings are black line art on
+transparency and only read on white — a dark theme needs new artwork
+before it needs CSS.
 
 ## Jekyll
 

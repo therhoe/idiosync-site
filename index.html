@@ -5,6 +5,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Light only. This also stops the browser darkening scrollbars and form
+       controls on a dark-mode machine. -->
+  <meta name="color-scheme" content="light">
   <title>idiosync — plain email for Shopify</title>
   <meta name="description" content="idiosync is the most toned-down email app for Shopify. No bells, no whistles — blasts, a few automations, and a sign-up form. That's it.">
   <link rel="canonical" href="https://idiosync.site/">
@@ -21,8 +24,10 @@
 
        Tokens are lifted from the app UI (`idio UI/index.html`) so the site
        and the app read as one thing: Shopify-adjacent greys, #303030 ink,
-       12px radius, the hairline shadow. Both halves of the app's theme come
-       with them, dark mode included.
+       12px radius, the hairline shadow. The app's dark half did NOT come
+       with them -- this page is white, full stop, and the drawings are
+       black line art that only works on white. Don't reintroduce a
+       `prefers-color-scheme` block without new artwork to go with it.
 
        Type is the system stack on purpose -- no webfont, no preconnect, no
        flash of unstyled text. Swap in a webfont only if the brand needs
@@ -47,50 +52,12 @@
       --pos-text: #0c5132;
       --shadow: 0 1px 0 rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.05);
       --radius: 12px;
-      --art-filter: none;      /* the hero drawing is black strokes on
-                                  transparency, so dark mode inverts it
-                                  rather than shipping a second file. */
 
       --maxw: 1040px;
       --gutter: 24px;
       --control-height: 44px;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --bg: #1a1a1a;
-        --surface: #252525;
-        --surface-sub: #2b2b2b;
-        --border: #3a3a3a;
-        --border-strong: #464646;
-        --text: #e3e3e3;
-        --text-sub: #b5b5b5;
-        --text-dim: #8a8a8a;
-        --ink: #e3e3e3;
-        --ink-text: #1a1a1a;
-        --pos-bg: #12341f;
-        --pos-text: #8ee0ad;
-        --shadow: none;
-        --art-filter: invert(1);
-      }
-    }
-    :root[data-theme="dark"] {
-      --bg: #1a1a1a;
-      --surface: #252525;
-      --surface-sub: #2b2b2b;
-      --border: #3a3a3a;
-      --border-strong: #464646;
-      --text: #e3e3e3;
-      --text-sub: #b5b5b5;
-      --text-dim: #8a8a8a;
-      --ink: #e3e3e3;
-      --ink-text: #1a1a1a;
-      --pos-bg: #12341f;
-      --pos-text: #8ee0ad;
-      --shadow: none;
-      --art-filter: invert(1);
-    }
-
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -117,7 +84,8 @@
        it on `.site-header` instead would run it edge to edge of the
        window, which reads as a toolbar.
 
-       The mark is the paper plane, and the wordmark stays set type beside
+       The mark is the paper plane (same line art as the hero), and the
+       wordmark stays set type beside
        it -- the logo carries no lettering, so dropping the text would take
        the product's name off the page. The mark is sized by height, to sit
        with the type; the heroes site sizes its mark by width because that
@@ -145,7 +113,6 @@
       display: block;
       height: 24px;
       width: auto;
-      filter: var(--art-filter);   /* same transparent line art as the hero */
     }
     .site-nav { display: flex; align-items: center; gap: 6px; }
     .site-nav a {
@@ -181,8 +148,8 @@
        The drawing is a hand-drawn paper plane -- left-justified at half the
        measure, not a banner. Half-width is the whole point: a mark the
        column can hold, rather than art the page is built around. It is
-       black strokes on transparency, so dark mode inverts it (see
-       `--art-filter`); a flat PNG with a white box would light up the page.
+       black strokes on transparency, so it sits on the white page with no
+       box around it.
        ------------------------------------------------------------------ */
     .hero { padding-block: 72px 0; }
     .hero-art { margin: 0 0 40px; }
@@ -191,7 +158,6 @@
       width: 50%;
       min-width: 240px;
       height: auto;
-      filter: var(--art-filter);
     }
     .hero h1 {
       max-width: 22ch;
