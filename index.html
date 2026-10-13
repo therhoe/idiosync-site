@@ -27,7 +27,9 @@
        one; it is a deliberate absence, not an oversight.
        ==================================================================== */
     :root {
-      --bg: #f1f1f1;
+      --bg: #ffffff;           /* the page is white, not the app's grey --
+                                  one flat surface, nothing floating on a
+                                  backdrop. */
       --surface: #ffffff;
       --surface-sub: #fafafa;
       --border: #e3e3e3;
@@ -43,6 +45,9 @@
       --pos-text: #0c5132;
       --shadow: 0 1px 0 rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.05);
       --radius: 12px;
+      --art-filter: none;      /* the hero drawing is black strokes on
+                                  transparency, so dark mode inverts it
+                                  rather than shipping a second file. */
 
       --maxw: 1040px;
       --gutter: 24px;
@@ -64,6 +69,7 @@
         --pos-bg: #12341f;
         --pos-text: #8ee0ad;
         --shadow: none;
+        --art-filter: invert(1);
       }
     }
     :root[data-theme="dark"] {
@@ -80,6 +86,7 @@
       --pos-bg: #12341f;
       --pos-text: #8ee0ad;
       --shadow: none;
+      --art-filter: invert(1);
     }
 
     * { box-sizing: border-box; }
@@ -102,17 +109,24 @@
        height. Not sticky: nothing here is urgent enough to follow you down
        the page.
 
+       The header is the same white as the page -- no bar, no fill, just a
+       rule. That rule lives on `.bar`, inside the wrap's gutter, so it
+       starts and stops exactly where the headline below it does. Putting
+       it on `.site-header` instead would run it edge to edge of the
+       window, which reads as a toolbar.
+
        There is no logo file yet, so the wordmark is set type. Drop in a
        `logo.png` and swap the <a class="brand"> text for an <img> -- see
        CLAUDE.md.
        ------------------------------------------------------------------ */
-    .site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
-    .site-header .wrap {
+    .site-header { background: var(--bg); }
+    .site-header .bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
       padding-block: 14px;
+      border-bottom: 1px solid var(--border);
     }
     .brand {
       font-size: 1.25rem;
@@ -127,14 +141,14 @@
       height: var(--control-height);
       padding: 0 14px;
       border-radius: 8px;
-      color: var(--text-sub);
+      color: var(--text);
       text-decoration: none;
       font-size: 0.95rem;
       white-space: nowrap;   /* a multi-word pill wraps to two lines and
                                 breaks the header's single row */
       transition: color .15s ease, background-color .15s ease;
     }
-    .site-nav a:hover { color: var(--text); background: var(--surface-sub); }
+    .site-nav a:hover { background: var(--surface-sub); }
     .site-nav a.cta {
       color: var(--ink-text);
       background: var(--ink);
@@ -144,11 +158,23 @@
     .site-nav a.cta:hover { color: var(--ink-text); opacity: .85; }
 
     /* --- hero ----------------------------------------------------------
-       One column, left-aligned, capped at a readable measure. No art: the
-       product has nothing to show off, which is the point, and a stock
-       illustration here would be the first bell.
+       One column, left-aligned, capped at a readable measure.
+
+       The drawing is a hand-drawn paper plane -- left-justified at half the
+       measure, not a banner. Half-width is the whole point: a mark the
+       column can hold, rather than art the page is built around. It is
+       black strokes on transparency, so dark mode inverts it (see
+       `--art-filter`); a flat PNG with a white box would light up the page.
        ------------------------------------------------------------------ */
-    .hero { padding-block: 88px 0; }
+    .hero { padding-block: 72px 0; }
+    .hero-art { margin: 0 0 40px; }
+    .hero-art img {
+      display: block;
+      width: 50%;
+      min-width: 240px;
+      height: auto;
+      filter: var(--art-filter);
+    }
     .hero h1 {
       max-width: 22ch;
       margin: 0 0 20px;
@@ -308,12 +334,14 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/">idiosync</a>
-    <nav class="site-nav">
-      <a class="nav-text" href="#what">What it does</a>
-      <a class="nav-text" href="#pricing">Pricing</a>
-      <a class="cta" href="#install">Install on Shopify</a>
-    </nav>
+    <div class="bar">
+      <a class="brand" href="/">idiosync</a>
+      <nav class="site-nav">
+        <a class="nav-text" href="#what">What it does</a>
+        <a class="nav-text" href="#pricing">Pricing</a>
+        <a class="cta" href="#install">Install on Shopify</a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -322,6 +350,10 @@
   <!-- DRAFT COPY — Shep to redline the headline, the sub, the three card
        blurbs and the not-list. Everything else here is structure. -->
   <section class="hero wrap">
+    <div class="hero-art">
+      <img src="/paper-plane.png" width="1200" height="830"
+           alt="A hand-drawn paper plane, with a dashed line trailing behind it.">
+    </div>
     <h1>Email for Shopify, with everything else taken out.</h1>
     <p class="sub">No scores, no AI assistant, no journey builder, no dashboard of numbers you will never act on. idiosync sends blasts, runs a handful of automations, and collects email addresses. That is the whole app.</p>
     <div class="hero-actions">

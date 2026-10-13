@@ -16,7 +16,14 @@ framing, 2026-10-13).
 That pitch constrains the site, not just the copy. **A page that oversells
 contradicts the product on sight.** Concretely, the homepage has:
 
-- one column, no hero illustration
+- one column, and one piece of art: `paper-plane.png`, left-justified at
+  half the measure in the hero. Half-width is the constraint that keeps it
+  a mark rather than a banner — don't let it grow.
+- white page, white header. `--bg` is #ffffff, not the app's grey, so
+  nothing floats on a backdrop. The header carries no fill, only a rule on
+  `.bar` — inside the wrap's gutter, so it starts and stops where the
+  headline does. A rule on `.site-header` would run window-wide and read as
+  a toolbar; that is the thing this page is avoiding.
 - one accent (`--ink`, #303030) — there is no brand colour yet and the page
   does not need one
 - the system font stack, no webfont request — a deliberate absence, not an
@@ -38,6 +45,10 @@ Freshly scaffolded. Nothing here has been reviewed by Shep yet.
 - **"Install on Shopify" links go to `#install`**, a dead anchor, because
   the app has no App Store listing URL yet. Swap all four (header nav, hero,
   pricing, and anywhere else they land) when the listing exists.
+- **The hero drawing is the only image.** `paper-plane.png` — black
+  strokes on transparency, trimmed to the artwork, 1200px wide. Dark mode
+  inverts it via `--art-filter` rather than shipping a second file, so any
+  future art has to be transparent line work or it needs its own handling.
 - **No logo and no favicon.** The header wordmark is set type
   (`a.brand`). When `logo.png` arrives, swap the text for an `<img>` and add
   a `<link rel="icon">` — the heroes site sizes its header mark to the
