@@ -1,0 +1,12 @@
+url: "https://idiosync.site"
+title: idiosync
+description: The most toned-down email app for Shopify. No bells, no whistles — just the core functions you need to send email.
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+exclude:
+  - .claude
+  - README.md
+  - CLAUDE.md
