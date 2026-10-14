@@ -128,7 +128,11 @@ change.
 
 The copy is Shep's now. The scaffold's draft marketing copy is gone.
 
-- **The letter is the page.** Shep's, pasted 2026-10-13, kept verbatim apart
+- **The letter is the page.** Replaced wholesale 2026-10-14 — the
+  "we used to… now we…" letter is gone; the current one runs from "Email
+  marketing is an important component of ecommerce" to "Cheers." It is
+  about half the length and makes the argument straight instead of by
+  lament. Shep's, kept verbatim apart
   from the typo fixes listed under Style. Don't tighten it, don't break it
   into sections, don't pull a line out as a pull-quote. The voice is the
   pitch.
@@ -235,12 +239,26 @@ breaks the meaning. Do NOT "fix" grammatical quirks that could be
 deliberate, or creative spellings — when in doubt, keep it verbatim and
 flag it instead.
 
-What that meant for the letter (2026-10-13), as a worked example. Fixed:
-"Now we like marketing toddlers" → "we're like"; "enable and automation" →
-"an automation"; "conquereed" → "conquered"; "some times" → "sometimes";
-"customers buttons" → "customers' buttons"; "meta" → "Meta" and "claude or
-chatgpt" → "Claude or ChatGPT" (companies and products — and lowercase
-"meta" reads as the adjective); "Idiosync" → "idiosync" per the brand rule.
-Left alone: "koolaid", "agentic whats-its", "blast a blast", "f***", the
-fragment "If I forgot something.", and the "we / I" shifts. Those are
-voice.
+What that meant for the current letter (2026-10-14), as a worked example.
+
+Fixed: "built it" → "built in" and "some built it version" → "built-in
+version" (twice — the same slip, and it inverts the sentence's meaning);
+"and them move on" → "and then move on"; "distrcations" → "distractions";
+"whether its" → "whether it's"; "claude or gpt" → "Claude or GPT"
+(companies and products); "Idiosync" → "idiosync", twice, per the brand
+rule. Straight quotes and apostrophes were curled to match the page.
+
+Left alone, deliberately: "kinda", "barebones", "a shitty version",
+"Yeah... that." as three periods rather than an ellipsis, and the capital
+"DO" in "What you DO gain" — that is emphasis in Shep's voice, and caps
+are the right way to carry it here because the face has one weight and
+cannot go bold.
+
+**Flagged, not fixed:** "It's kinda like the legacy software are a line of
+luxury cars" — "software are" is a number disagreement, but it could be
+him treating the legacy apps as a plural set. Per the rule above it was
+left verbatim. If Shep wants it, "the legacy software is a line of luxury
+cars" or "the legacy apps are a line of luxury cars" both work.
+
+The earlier letter's fix list (2026-10-13) is in git history at `efde2c3`
+if the old copy ever needs restoring.
