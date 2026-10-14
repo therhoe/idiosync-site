@@ -33,6 +33,18 @@ than it sounds. Concretely, the homepage has:
   a toolbar; that is the thing this page is avoiding.
 - one accent (`--ink`, #303030) — there is no brand colour yet and the page
   does not need one
+- **one text colour, site-wide** (Shep's call, 2026-10-14). #303030, with
+  no muted grey anywhere. `--text-sub` and `--text-dim` are gone, not
+  merely unused — the hero sub, the signoff and the footer were all lighter
+  and are not now. The only other text colour on the page is the white
+  inside the black header pill, which has to stay legible. If something
+  needs to recede, it recedes by size or position, never by going grey.
+- **the headline and the body are one block, not two.** The sub under the
+  headline is the letter's opening line: same ink, same 62ch measure, and
+  one paragraph space (22px) between it and the first `.letter p` — the
+  same gap the paragraphs have with each other. It used to be 72px, which
+  read as a section break between two separate things. `.letter` has no
+  mobile padding override for the same reason. Don't put the air back.
 - one typeface: **Bryndan Write**, self-hosted. See "Type" below.
 - nothing animated beyond hover transitions
 - exactly two things to click in the body: the header pill and the text

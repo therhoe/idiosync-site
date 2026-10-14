@@ -66,9 +66,11 @@
       --surface-sub: #fafafa;
       --border: #e3e3e3;
       --border-strong: #d6d6d6;
+      /* ONE ink, site-wide (Shep's call, 2026-10-14). There is no muted
+         grey any more -- the sub, the signoff and the footer were all
+         lighter and are not now. If something needs to recede, it recedes
+         by size or position, not by going grey. */
       --text: #303030;
-      --text-sub: #616161;
-      --text-dim: #8a8a8a;
       --ink: #303030;          /* the one accent: ink-on-light, light-on-ink.
                                   There is no brand colour yet and the page
                                   does not need one. */
@@ -188,31 +190,38 @@
       line-height: 1.08;
       letter-spacing: -0.03em;
     }
+    /* Not a deck any more: same ink and the same measure as the letter, so
+       it reads as the body's first line rather than a caption under the
+       headline. Still a notch larger -- that is the only thing marking it
+       as the opening. */
     .hero .sub {
-      max-width: 56ch;
+      max-width: 62ch;
       margin: 0;
-      font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-      color: var(--text-sub);
-      line-height: 1.55;
+      font-size: clamp(1.05rem, 1.6vw, 1.15rem);
+      line-height: 1.72;
     }
 
     /* --- the letter ----------------------------------------------------
-       Narrower than the hero on purpose: this is reading, not scanning, so
-       it gets a measure you can actually track across -- about 62
-       characters. Slightly larger type and a looser leading than the rest
-       of the page for the same reason.
+       62-character measure: this is reading, not scanning, so it gets a
+       line you can track across, with a loose leading for the same reason.
 
-       The one-line paragraphs ("Together.") are Shep's beats. They are
-       paragraphs, not <br>s, so they keep their air on a phone.
+       It is NOT a separate band from the hero (Shep's call, 2026-10-14).
+       The sub above is the same ink on the same measure, and the gap here
+       is one paragraph space -- the 72px that used to sit here read as a
+       section break between two things, when it is just a headline and
+       the body under it. Don't put the air back.
+
+       Shep's one-line paragraphs are his beats. They are paragraphs, not
+       <br>s, so they keep their air on a phone.
        ------------------------------------------------------------------ */
-    .letter { padding-block: 72px 0; }
+    .letter { padding-block: 22px 0; }
     .letter p {
       max-width: 62ch;
       margin: 0 0 22px;
       font-size: 1.0625rem;
       line-height: 1.72;
     }
-    .letter .signoff { margin-top: 34px; color: var(--text-sub); }
+    .letter .signoff { margin-top: 34px; }
 
     /* --- the one link --------------------------------------------------
        A text link, not a button. The letter's whole case is that the app
@@ -235,7 +244,6 @@
       margin: 96px 0 0;
       padding: 28px 0 48px;
       border-top: 1px solid var(--border);
-      color: var(--text-dim);
       font-size: 0.9rem;
     }
     footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
@@ -244,7 +252,8 @@
     @media (max-width: 600px) {
       :root { --gutter: 18px; }
       .hero { padding-top: 56px; }
-      .letter { padding-top: 56px; }
+      /* No .letter override here on purpose -- a 56px gap on a phone would
+         undo the join and split the page back into two blocks. */
     }
     /* Bryndan is a wide face -- noticeably wider than the system stack this
        page used to be set in -- and the header is the one row where that
