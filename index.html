@@ -13,6 +13,11 @@
   <link rel="canonical" href="https://idiosync.site/">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
+  <!-- The page is set entirely in this one face, so it is worth fetching
+       before the stylesheet asks for it. Self-hosted and same-origin, but
+       fonts are always fetched in CORS mode -- without `crossorigin` the
+       browser downloads it twice. -->
+  <link rel="preload" href="assets/fonts/bryndan-write.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     /* ====================================================================
        Homepage. One drawing, one headline, one piece of writing, one link.
@@ -34,10 +39,25 @@
        white. Don't reintroduce a `prefers-color-scheme` block without new
        artwork to go with it.
 
-       Type is the system stack on purpose -- no webfont, no preconnect, no
-       flash of unstyled text. Swap in a webfont only if the brand needs
-       one; it is a deliberate absence, not an oversight.
+       Type is Bryndan Write, self-hosted (Shep's pick, 2026-10-13). The
+       page is a hand-drawn plane over a handwritten letter, so a drawn
+       face is the honest setting for it. See CLAUDE.md on where it came
+       from and what had to be added to it.
        ==================================================================== */
+
+    /* Self-hosted, one weight, no italic. `font-display: swap` means the
+       letter is readable in the system stack for the moment before the
+       face lands -- 23KB, so that moment is short. The fallback list is
+       ordered to keep the reflow small rather than to look like Bryndan,
+       which nothing in a system stack does. */
+    @font-face {
+      font-family: "Bryndan Write";
+      src: url("assets/fonts/bryndan-write.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --bg: #ffffff;           /* the page is white, not the app's grey --
                                   one flat surface, nothing floating on a
@@ -58,7 +78,10 @@
       --maxw: 1040px;
       --gutter: 24px;
       --control-height: 44px;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      /* The face has ONE weight. Anything asking for bold gets a
+         browser-synthesized smear, so nothing on this page sets a weight
+         above 500 -- see the note on .hero h1. */
+      --font: "Bryndan Write", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -67,6 +90,10 @@
       background: var(--bg);
       color: var(--text);
       font-family: var(--font);
+      /* One weight, no italic. Without this a browser asked for bold draws
+         it by smearing the outline, which on a drawn face looks like a
+         printing fault. Anything bold here degrades to regular instead. */
+      font-synthesis-weight: none;
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -105,7 +132,7 @@
       align-items: center;
       gap: 10px;
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: -0.02em;
       text-decoration: none;
     }
@@ -154,8 +181,10 @@
     .hero h1 {
       max-width: 22ch;
       margin: 0 0 20px;
-      font-size: clamp(2.2rem, 5.5vw, 3.4rem);
-      font-weight: 600;
+      /* 400, not 600. The face ships one weight, so a heavier request is
+         drawn by the browser smearing the outline sideways. At this size
+         the hierarchy is already carried by scale. */
+      font-weight: 400;
       line-height: 1.08;
       letter-spacing: -0.03em;
     }
@@ -216,6 +245,17 @@
       :root { --gutter: 18px; }
       .hero { padding-top: 56px; }
       .letter { padding-top: 56px; }
+    }
+    /* Bryndan is a wide face -- noticeably wider than the system stack this
+       page used to be set in -- and the header is the one row where that
+       costs something: mark + wordmark + "Install on Shopify" stopped
+       fitting and pushed the whole page sideways. Both ends give a little
+       rather than the pill wrapping or the name coming off the page. */
+    @media (max-width: 420px) {
+      .site-header .bar { gap: 10px; }
+      .brand { gap: 7px; font-size: 1.05rem; }
+      .brand img { height: 20px; }
+      .site-nav a.cta { height: 38px; padding: 0 12px; font-size: 0.85rem; }
     }
   </style>
 </head>

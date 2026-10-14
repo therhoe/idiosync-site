@@ -33,8 +33,7 @@ than it sounds. Concretely, the homepage has:
   a toolbar; that is the thing this page is avoiding.
 - one accent (`--ink`, #303030) — there is no brand colour yet and the page
   does not need one
-- the system font stack, no webfont request — a deliberate absence, not an
-  oversight. Don't add one without asking.
+- one typeface: **Bryndan Write**, self-hosted. See "Type" below.
 - nothing animated beyond hover transitions
 - exactly two things to click in the body: the header pill and the text
   link under the letter, both pointing at the same place. The link is a
@@ -43,6 +42,62 @@ than it sounds. Concretely, the homepage has:
 
 Before adding anything to this site, ask whether the thing you're adding is
 the kind of thing the product refuses to ship. If it is, don't.
+
+## Type
+
+The whole page is set in **Bryndan Write** (Shep's pick, 2026-10-13),
+self-hosted at `assets/fonts/bryndan-write.woff2`. It replaced the system
+stack the scaffold shipped with.
+
+**Where it came from.** A freeware TrueType upload on FontSpace
+(`bryndan-write-font-f25017`), uploaded 2016 by a pseudonymous account
+("123467", elsewhere "Brynda1231 Industries"). Not on Google Fonts and not
+on any CDN, which is why it is self-hosted.
+
+**The license is unresolved, and that was a decision, not an oversight.**
+The page says "Freeware" and nothing more; the bundled `info.txt` says the
+same. On FontSpace that word alone grants nothing specific — other fonts
+there carry "Freeware, Non-Commercial". A commercial-use question on the
+page went unanswered for six years. Mirror sites contradict each other
+(free for commercial / public domain / designer unknown) and the embedded
+copyright is `Copyright (c) 2016, root`, the FontForge default nobody
+filled in.
+
+Shep's call, 2026-10-13: ship it, on the read that it is a hobbyist font
+nobody has claimed in ten years. **Don't quietly re-open this.** If a claim
+ever arrives, the swap is one `@font-face` and one `--font` line, and
+Shantell Sans (Google Fonts, OFL) is the closest match — upright marker
+print, same rounded monolinear feel, and it has real weights.
+
+**It had holes, and they are patched at build time.** The shipped TTF has
+no curly quotes, no em dash and no ellipsis — all three are throughout
+Shep's letter, so every apostrophe would have fallen back to system sans
+mid-word. `.claude/scripts/build-bryndan-woff2.py` fixes that and is the
+only way this file should be regenerated:
+
+- U+2019 → the existing `quotesingle`; U+201C/U+201D → `quotedbl`
+- U+2014 → the `hyphen` outline stretched 2.2× on x (a composite can't
+  scale that far — F2Dot14 tops out just under 2)
+- U+2026 → a composite of three `period` glyphs
+- then subset to Latin-1 + punctuation, which is what takes it from 167KB
+  to 23KB. The face also carries Greek, Cyrillic, Hiragana and Katakana
+  this site will never set.
+
+The source TTF and its license file are kept beside the script. Needs
+`fonttools` + `brotli`.
+
+**One weight, no italic.** Nothing may set `font-weight` above 500 — a
+heavier request gets drawn by smearing the outline sideways, which on a
+drawn face looks like a printing fault. `body` sets
+`font-synthesis-weight: none` so it degrades to regular instead of faking
+it. The h1 is 400 and leans on scale for hierarchy. **If the page ever
+needs real emphasis, it needs a second font file, not a bolder number.**
+
+**It is wide** — wider than the system stack this page was built against.
+That broke the header on narrow phones (mark + wordmark + pill overflowed
+and pushed the page sideways); there's a `max-width: 420px` block that
+shrinks both ends to fit. Check the header at ~320px after any header
+change.
 
 ## Status (2026-10-13)
 
