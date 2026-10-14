@@ -43,6 +43,31 @@ than it sounds. Concretely, the homepage has:
 Before adding anything to this site, ask whether the thing you're adding is
 the kind of thing the product refuses to ship. If it is, don't.
 
+## Hosting — temporary URL (2026-10-13)
+
+The site is served from GitHub Pages at
+**https://therhoe.github.io/idiosync-site/**, a *project* URL, not the
+apex. The custom domain comes later.
+
+**`CNAME` was deleted on purpose.** With a `CNAME` file present, Pages sets
+the custom domain and redirects the github.io URL to `idiosync.site` — which
+has no DNS yet, so the site would look dead. The file comes back the same
+day DNS does.
+
+Because it is a project URL, everything under it lives at
+`/idiosync-site/`, so **all paths in `index.html` must stay relative**
+(`assets/...`, `logo.png`, `./`). A leading `/` points at the top of
+`therhoe.github.io` and breaks. Both absolute links that existed are now
+relative.
+
+Still pointing at the apex, correct for the final site and harmless on the
+temporary one: `canonical` in `index.html`, `url:` in `_config.yml`, and
+the sitemap line in `robots.txt`.
+
+**To hook up the domain later:** restore `CNAME` containing `idiosync.site`,
+point DNS at GitHub's apex A records, set the custom domain in Settings →
+Pages, then tick Enforce HTTPS once it verifies.
+
 ## Type
 
 The whole page is set in **Bryndan Write** (Shep's pick, 2026-10-13),
