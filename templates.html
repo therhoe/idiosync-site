@@ -1,0 +1,519 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>A little inspo — idiosync</title>
+  <meta name="description" content="Six email layouts for idiosync. Take one to your AI, paste the HTML back in, and send.">
+  <link rel="canonical" href="https://idiosync.site/templates.html">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preload" href="assets/fonts/bryndan-write.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    /* ====================================================================
+       A little inspo. Six example emails; click one to see it full
+       size, or copy a prompt that carries the email's own HTML with it.
+
+       Page title and body copy are Shep's, 2026-10-14.
+
+       WHY THIS PAGE IS ALLOWED TO EXIST on a site whose whole argument is
+       that the product refuses features: it is not a feature, it is
+       documentation. The app requires you to bring your own HTML, so a
+       page that shows you how to get some is removing a hurdle rather than
+       adding a whistle. That stays true at six, flat, no filters, no
+       categories, no counts, no "more coming soon". Add any of those and
+       this becomes the template library the product is supposed to not
+       have.
+
+       The thumbnails are the real emails in scaled-down iframes, not
+       screenshots -- so a template can never drift from its picture. The
+       trade is that the scale has to be measured in JS; see setScale().
+
+       Chrome styles (tokens, header, footer) are DUPLICATED from
+       index.html rather than shared. A Jekyll layout is the right fix and
+       CLAUDE.md already says so, but the local preview server doesn't run
+       Jekyll, so a layout can't be eyeballed before it ships. Do that
+       refactor when there's a way to verify it.
+       ==================================================================== */
+
+    @font-face {
+      font-family: "Bryndan Write";
+      src: url("assets/fonts/bryndan-write.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-sub: #fafafa;
+      --border: #e3e3e3;
+      --border-strong: #d6d6d6;
+      --text: #303030;          /* one ink, site-wide. No muted grey. */
+      --ink: #303030;
+      --ink-text: #ffffff;
+      --radius: 12px;
+      --maxw: 1040px;
+      --gutter: 24px;
+      --control-height: 44px;
+      --font: "Bryndan Write", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      /* No italic in the file either -- `style` catches <em>, which a
+         browser would otherwise draw by slanting the outline. */
+      font-synthesis: none;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    p { margin: 0 0 16px; }
+    a { color: inherit; }
+    .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+
+    /* --- header: same as index.html ----------------------------------- */
+    .site-header { background: var(--bg); }
+    .site-header .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-block: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .brand img { display: block; height: 24px; width: auto; }
+    .site-nav { display: inline-flex; align-items: center; gap: 22px; }
+    /* The templates link sits beside the pill as plain text. It is a
+       second destination, not a second call to action -- two pills in one
+       header would make the page look like it wants something. */
+    .site-nav a.nav-link {
+      font-size: 0.95rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+      white-space: nowrap;
+    }
+    .site-nav a.nav-link:hover { text-decoration-thickness: 2px; }
+    .site-nav a.cta {
+      display: inline-flex;
+      align-items: center;
+      height: var(--control-height);
+      padding: 0 18px;
+      border-radius: 8px;
+      color: var(--ink-text);
+      background: var(--ink);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: opacity .15s ease;
+    }
+    .site-nav a.cta:hover { opacity: .85; }
+
+    /* --- the page's own intro ----------------------------------------- */
+    .intro { padding-block: 64px 0; }
+    .intro h1 {
+      max-width: 22ch;
+      margin: 0 0 20px;
+      font-weight: 400;       /* one weight in the face; scale carries it */
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+    .intro p {
+      max-width: 62ch;
+      margin: 0 0 20px;
+      font-size: 1.0625rem;
+      line-height: 1.72;
+    }
+    .intro p:last-child { margin-bottom: 0; }
+
+    /* --- the six ------------------------------------------------------
+       auto-fill rather than a fixed 3, so the grid doesn't need its own
+       breakpoints. The cards have no shadow: each email is already a
+       rectangle of its own colour sitting on a white page, and a floating
+       box around it reads as a product card.
+       ----------------------------------------------------------------- */
+    .grid {
+      padding-block: 48px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 52px 28px;
+    }
+
+    /* The clipping window. Its height is set in JS to the scaled height of
+       the iframe, so the proportions stay honest at any column width. */
+    .thumb {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 1px solid var(--border);
+      background: var(--surface-sub);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      transition: border-color .15s ease;
+    }
+    .thumb:hover, .thumb:focus-visible { border-color: var(--ink); }
+    .thumb iframe {
+      width: 600px;
+      height: 1000px;
+      border: 0;
+      display: block;
+      transform-origin: top left;
+      pointer-events: none;   /* the thumbnail is a picture, not a page --
+                                 clicks belong to the button around it */
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 14px;
+    }
+    .card-foot h2 {
+      margin: 0;
+      font-size: 1.0625rem;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    /* Quiet bordered button. Not a pill -- the black pill in the header is
+       the one loud thing on this site and it should stay the only one. */
+    .copy {
+      flex: none;
+      padding: 7px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      color: inherit;
+      font: inherit;
+      font-size: 0.9rem;
+      line-height: 1.3;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .copy:hover { border-color: var(--ink); }
+    .copy[data-done="1"] { border-color: var(--ink); background: var(--surface-sub); }
+
+    /* --- full view ---------------------------------------------------- */
+    dialog.viewer {
+      width: min(680px, calc(100vw - 32px));
+      max-width: none;
+      max-height: calc(100vh - 48px);
+      padding: 0;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: inherit;
+      overflow: hidden;
+    }
+    dialog.viewer::backdrop { background: rgba(48, 48, 48, .55); }
+    .viewer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .viewer-bar h3 { margin: 0; font-size: 1rem; font-weight: 400; }
+    .viewer-bar .right { display: inline-flex; align-items: center; gap: 10px; }
+    .viewer-close {
+      padding: 6px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      color: inherit;
+      font: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .viewer-close:hover { border-color: var(--ink); }
+    .viewer-body { background: var(--surface-sub); }
+    .viewer-body iframe {
+      display: block;
+      width: 100%;
+      height: min(72vh, 900px);
+      border: 0;
+      background: #ffffff;
+    }
+
+    footer {
+      margin: 96px 0 0;
+      padding: 28px 0 48px;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+    footer a { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 600px) {
+      :root { --gutter: 18px; }
+      .intro { padding-top: 48px; }
+      .grid { gap: 40px 20px; }
+    }
+    /* Bryndan is wide. Three things in the header instead of two makes the
+       narrow case tighter than index.html's -- the text link drops out
+       below 520px, because the pill is the one that has to survive and
+       this page is still reachable from the homepage. */
+    @media (max-width: 520px) {
+      .site-nav a.nav-link { display: none; }
+    }
+    @media (max-width: 420px) {
+      .site-header .bar { gap: 10px; }
+      .brand { gap: 7px; font-size: 1.05rem; }
+      .brand img { height: 20px; }
+      .site-nav a.cta { height: 38px; padding: 0 12px; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="./" aria-label="idiosync home">
+        <img src="logo.png" alt="" width="486" height="240">
+        <span>idiosync</span>
+      </a>
+      <nav class="site-nav">
+        <a class="nav-link" href="templates.html">A little inspo</a>
+        <a class="cta" href="#install">Install on Shopify</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="intro wrap">
+    <h1>A little inspiration never hurts...</h1>
+    <!-- Shep's, 2026-10-14. Verbatim; the only change is "Idiosync" to
+         lowercase per the brand rule. Kept as one block because that is how
+         he wrote it -- the beats ("Or best. Or both.") carry themselves
+         inside the paragraph and don't need the air. -->
+    <p>These templates cover the most common email layouts. They also look good on mobile. All you gotta do is inject your AI with the beautifully written HTML. Then you can do your worst. Or best. Or both. Paste those shenanigans into the HTML editor of idiosync, and flip the switch. Email done. Go to the bank and help them count your monies. It should be coming in by the truckload.</p>
+  </section>
+
+  <!-- Each card's iframe and its Copy prompt button read the SAME file
+       under templates/ -- the thumbnail is the email, so there is no
+       screenshot to keep in sync. -->
+  <section class="grid wrap" id="grid"></section>
+
+</main>
+
+<dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+  <div class="viewer-bar">
+    <h3 id="viewer-title"></h3>
+    <span class="right">
+      <button class="copy" type="button" id="viewer-copy">Copy prompt</button>
+      <button class="viewer-close" type="button" id="viewer-close">Close</button>
+    </span>
+  </div>
+  <div class="viewer-body"><iframe id="viewer-frame" title="Email preview"></iframe></div>
+</dialog>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 idiosync</span>
+    <span><a href="privacy-policy.html">Privacy</a></span>
+  </div>
+</footer>
+
+<script>
+/* The six, in display order. `file` is the single source for both the
+   thumbnail and the clipboard. */
+var TEMPLATES = [
+  { name: "A welcome note",    file: "templates/welcome.html" },
+  { name: "A new arrival",     file: "templates/new-arrival.html" },
+  { name: "A sale",            file: "templates/sale.html" },
+  { name: "An abandoned cart", file: "templates/abandoned-cart.html" },
+  { name: "Just a letter",     file: "templates/plain-letter.html" },
+  { name: "Back in stock",     file: "templates/back-in-stock.html" }
+];
+
+/* The instructions half of the clipboard. The HTML follows underneath.
+
+   It is written at the AI, not at the user, and the three things it insists
+   on are the three an AI will otherwise "improve": it rewrites table
+   layouts into divs, it hoists inline styles into a <style> block, and it
+   tidies up merge variables it doesn't recognise. Each one breaks the email
+   somewhere between Outlook and send time. */
+function buildPrompt(name, html) {
+  return [
+    "Below is a complete HTML email template. Rewrite it for my store.",
+    "",
+    "Keep the table structure and the inline styles exactly as they are. That markup is what makes an email render the same in Outlook, Gmail and Apple Mail -- it is deliberately old-fashioned. Don't modernise it, don't move the styles into a <style> block, don't replace the tables with divs or flexbox.",
+    "",
+    "Change only:",
+    "- the copy",
+    "- the colours",
+    "- the image placeholders (swap each grey IMAGE block for a real <img> pointing at my own hosted image, keeping the same width)",
+    "- the link URLs on the buttons",
+    "",
+    "Leave every {{ variable }} exactly as it is written. idiosync fills those in when the email sends, so one that gets renamed or deleted breaks at send time. The unsubscribe link has to stay.",
+    "",
+    "Before you write anything, ask me what this email is for, what I sell, and how I want to sound.",
+    "",
+    "When you're done, output one complete HTML file and nothing else.",
+    "",
+    "--- TEMPLATE: " + name + " ---",
+    "",
+    html
+  ].join("\n");
+}
+
+/* Thumbnails are the real page scaled down, so the factor depends on the
+   column width the grid landed on. Measured, not assumed. */
+function setScale(box) {
+  var frame = box.querySelector("iframe");
+  var s = box.clientWidth / 600;
+  frame.style.transform = "scale(" + s + ")";
+  box.style.height = Math.round(1000 * s) + "px";
+}
+
+/* One fetch per template, cached, shared by the button and the viewer. */
+var cache = {};
+function load(file) {
+  if (!cache[file]) {
+    cache[file] = fetch(file).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.text();
+    });
+  }
+  return cache[file];
+}
+
+/* navigator.clipboard is the right call but it refuses in more cases than
+   it looks like it should -- it needs a secure context, a live user gesture
+   AND a focused document, and it throws NotAllowedError for all three the
+   same way. The textarea + execCommand route is deprecated and still works
+   everywhere, so it catches whatever the first one dropped. */
+function toClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).catch(function () { return legacyCopy(text); });
+  }
+  return legacyCopy(text);
+}
+
+function legacyCopy(text) {
+  return new Promise(function (resolve, reject) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    /* Off-screen rather than display:none -- a hidden field can't be
+       selected, and scrolling the page would be visible. */
+    ta.style.cssText = "position:fixed;top:0;left:-9999px;opacity:0;";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    ok ? resolve() : reject(new Error("copy refused"));
+  });
+}
+
+function copyPrompt(btn, tpl) {
+  load(tpl.file).then(function (html) {
+    return toClipboard(buildPrompt(tpl.name, html));
+  }).then(function () {
+    btn.textContent = "Copied";
+    btn.dataset.done = "1";
+    setTimeout(function () {
+      btn.textContent = "Copy prompt";
+      delete btn.dataset.done;
+    }, 2200);
+  }).catch(function () {
+    /* What's left after both copy routes: fetch itself failed. file://
+       blocks it, so opening this page straight off disk is the case that
+       doesn't work -- use the preview server. */
+    btn.textContent = "Couldn't copy";
+    setTimeout(function () { btn.textContent = "Copy prompt"; }, 2200);
+  });
+}
+
+var viewer = document.getElementById("viewer");
+var viewerFrame = document.getElementById("viewer-frame");
+var viewerTitle = document.getElementById("viewer-title");
+var viewerCopy = document.getElementById("viewer-copy");
+var current = null;
+
+function openViewer(tpl) {
+  current = tpl;
+  viewerTitle.textContent = tpl.name;
+  viewerFrame.src = tpl.file;
+  viewerCopy.textContent = "Copy prompt";
+  delete viewerCopy.dataset.done;
+  viewer.showModal();
+}
+
+document.getElementById("viewer-close").addEventListener("click", function () { viewer.close(); });
+viewerCopy.addEventListener("click", function () { if (current) copyPrompt(viewerCopy, current); });
+/* Clicking the backdrop closes it. The dialog's own children sit above, so
+   a target of the dialog itself means the click missed the card. */
+viewer.addEventListener("click", function (e) { if (e.target === viewer) viewer.close(); });
+viewer.addEventListener("close", function () { viewerFrame.src = "about:blank"; });
+
+var grid = document.getElementById("grid");
+TEMPLATES.forEach(function (tpl) {
+  var card = document.createElement("div");
+
+  var box = document.createElement("button");
+  box.type = "button";
+  box.className = "thumb";
+  box.setAttribute("aria-label", "See “" + tpl.name + "” full size");
+  var frame = document.createElement("iframe");
+  frame.src = tpl.file;
+  frame.setAttribute("scrolling", "no");
+  frame.setAttribute("tabindex", "-1");
+  frame.setAttribute("aria-hidden", "true");
+  frame.title = tpl.name;
+  box.appendChild(frame);
+  box.addEventListener("click", function () { openViewer(tpl); });
+
+  var foot = document.createElement("div");
+  foot.className = "card-foot";
+  var h2 = document.createElement("h2");
+  h2.textContent = tpl.name;
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy";
+  btn.textContent = "Copy prompt";
+  btn.addEventListener("click", function () { copyPrompt(btn, tpl); });
+  foot.appendChild(h2);
+  foot.appendChild(btn);
+
+  card.appendChild(box);
+  card.appendChild(foot);
+  grid.appendChild(card);
+
+  setScale(box);
+  if (window.ResizeObserver) new ResizeObserver(function () { setScale(box); }).observe(box);
+});
+</script>
+
+</body>
+</html>

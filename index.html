@@ -143,6 +143,18 @@
       height: 24px;
       width: auto;
     }
+    /* Two things in the nav now. The templates link is plain underlined
+       text, not a second pill -- one black button is the site's whole
+       allowance for raising its voice, and it belongs to install. */
+    .site-nav { display: inline-flex; align-items: center; gap: 22px; }
+    .site-nav a.nav-link {
+      font-size: 0.95rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+      white-space: nowrap;
+    }
+    .site-nav a.nav-link:hover { text-decoration-thickness: 2px; }
     .site-nav a.cta {
       display: inline-flex;
       align-items: center;
@@ -260,6 +272,12 @@
        costs something: mark + wordmark + "Install on Shopify" stopped
        fitting and pushed the whole page sideways. Both ends give a little
        rather than the pill wrapping or the name coming off the page. */
+    /* Three things in the header where there used to be two. The text
+       link is the one that gives way -- the pill has to survive, and the
+       templates page is linked again from the footer. */
+    @media (max-width: 520px) {
+      .site-nav a.nav-link { display: none; }
+    }
     @media (max-width: 420px) {
       .site-header .bar { gap: 10px; }
       .brand { gap: 7px; font-size: 1.05rem; }
@@ -278,6 +296,7 @@
         <span>idiosync</span>
       </a>
       <nav class="site-nav">
+        <a class="nav-link" href="templates.html">A little inspo</a>
         <a class="cta" href="#install">Install on Shopify</a>
       </nav>
     </div>
@@ -336,7 +355,7 @@
 <footer>
   <div class="wrap">
     <span>&copy; 2026 idiosync</span>
-    <span><a href="privacy-policy.html">Privacy</a></span>
+    <span><a href="templates.html">A little inspo</a> &nbsp;&middot;&nbsp; <a href="privacy-policy.html">Privacy</a></span>
   </div>
 </footer>
 

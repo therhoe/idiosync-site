@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- PLACEHOLDER VARIABLES. The {{ ... }} tags in this file are NOT idiosync's
+     real merge syntax yet -- they are stand-ins so the mockup reads right.
+     Every template under templates/ uses the same four. See CLAUDE.md. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f1ea;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">A quick note about what you just signed up for.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f1ea;">
+  <tr><td align="center" style="padding:32px 12px;">
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;">
+
+      <tr><td style="padding:40px 44px 0;font:14px/1.4 Georgia,'Times New Roman',serif;color:#9a9385;letter-spacing:.14em;text-transform:uppercase;">
+        {{ shop_name }}
+      </td></tr>
+
+      <tr><td style="padding:28px 44px 0;font:400 34px/1.2 Georgia,'Times New Roman',serif;color:#2b2a26;">
+        Hi {{ first_name }} &mdash;<br>welcome in.
+      </td></tr>
+
+      <tr><td style="padding:22px 44px 0;font:16px/1.7 Georgia,'Times New Roman',serif;color:#4a483f;">
+        <p style="margin:0 0 16px;">You signed up, so here is what that actually means: about two emails a month. One when something new lands, one when we have something worth saying.</p>
+        <p style="margin:0;">No daily anything. If we ever get noisy, the unsubscribe link at the bottom works and we won't be offended.</p>
+      </td></tr>
+
+      <tr><td style="padding:34px 44px 0;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="background:#2b2a26;">
+            <a href="#" style="display:inline-block;padding:15px 30px;font:14px/1 Helvetica,Arial,sans-serif;color:#ffffff;text-decoration:none;letter-spacing:.06em;">START BROWSING</a>
+          </td>
+        </tr></table>
+      </td></tr>
+
+      <tr><td style="padding:40px 44px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td width="48%" style="background:#e8e3d7;height:150px;font:12px/150px Helvetica,Arial,sans-serif;color:#9a9385;text-align:center;">IMAGE 248&times;150</td>
+          <td width="4%"></td>
+          <td width="48%" style="background:#ded7c6;height:150px;font:12px/150px Helvetica,Arial,sans-serif;color:#9a9385;text-align:center;">IMAGE 248&times;150</td>
+        </tr></table>
+      </td></tr>
+
+      <tr><td style="padding:34px 44px 0;font:16px/1.7 Georgia,'Times New Roman',serif;color:#4a483f;">
+        Reply to this one if you have a question. It comes to a person.
+      </td></tr>
+
+      <tr><td style="padding:30px 44px 0;font:16px/1.7 Georgia,'Times New Roman',serif;color:#2b2a26;">
+        &mdash; The {{ shop_name }} team
+      </td></tr>
+
+      <tr><td style="padding:40px 44px 44px;font:12px/1.7 Helvetica,Arial,sans-serif;color:#9a9385;border-top:1px solid #ece8df;margin-top:20px;">
+        {{ shop_name }}<br>
+        <a href="{{ unsubscribe_url }}" style="color:#9a9385;">Unsubscribe</a> &nbsp;&middot;&nbsp;
+        <a href="{{ view_in_browser_url }}" style="color:#9a9385;">View in browser</a>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

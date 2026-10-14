@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- PLACEHOLDER VARIABLES -- see CLAUDE.md. Not idiosync's real merge syntax yet. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You left something</title>
+</head>
+<body style="margin:0;padding:0;background:#f7f7f5;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">Your cart is still sitting there.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f7f7f5;">
+  <tr><td align="center" style="padding:36px 12px;">
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;border:1px solid #e9e9e6;">
+
+      <tr><td style="padding:26px 36px;border-bottom:1px solid #f0f0ee;font:14px/1 Helvetica,Arial,sans-serif;color:#1a1a1a;letter-spacing:.14em;text-transform:uppercase;">
+        {{ shop_name }}
+      </td></tr>
+
+      <tr><td style="padding:40px 36px 0;font:400 30px/1.25 Helvetica,Arial,sans-serif;color:#1a1a1a;letter-spacing:-.015em;">
+        {{ first_name }}, your cart<br>is still here
+      </td></tr>
+
+      <tr><td style="padding:20px 36px 0;font:16px/1.7 Helvetica,Arial,sans-serif;color:#555555;">
+        We saved it. Nothing has sold out yet, but we only hold stock for so long.
+      </td></tr>
+
+      <tr><td style="padding:32px 36px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #ececea;">
+          <tr>
+            <td width="110" style="background:#f2f2ef;height:110px;font:11px/110px Helvetica,Arial,sans-serif;color:#a5a5a0;text-align:center;">IMAGE</td>
+            <td style="padding:0 20px;font:15px/1.6 Helvetica,Arial,sans-serif;color:#1a1a1a;">
+              <strong style="font-weight:600;">Product name</strong><br>
+              <span style="color:#777777;font-size:14px;">Natural / Medium</span><br>
+              <span style="color:#1a1a1a;">$68.00</span>
+            </td>
+          </tr>
+          <tr><td colspan="2" style="border-top:1px solid #ececea;"></td></tr>
+          <tr>
+            <td width="110" style="background:#f2f2ef;height:110px;font:11px/110px Helvetica,Arial,sans-serif;color:#a5a5a0;text-align:center;">IMAGE</td>
+            <td style="padding:0 20px;font:15px/1.6 Helvetica,Arial,sans-serif;color:#1a1a1a;">
+              <strong style="font-weight:600;">Product name</strong><br>
+              <span style="color:#777777;font-size:14px;">Charcoal / One size</span><br>
+              <span style="color:#1a1a1a;">$42.00</span>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <tr><td style="padding:26px 36px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="font:16px/1.6 Helvetica,Arial,sans-serif;color:#1a1a1a;">Subtotal</td>
+          <td align="right" style="font:16px/1.6 Helvetica,Arial,sans-serif;color:#1a1a1a;">$110.00</td>
+        </tr></table>
+      </td></tr>
+
+      <tr><td style="padding:28px 36px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td align="center" style="background:#1a1a1a;">
+            <a href="#" style="display:block;padding:17px 0;font:15px/1 Helvetica,Arial,sans-serif;color:#ffffff;text-decoration:none;letter-spacing:.04em;">Finish checking out</a>
+          </td>
+        </tr></table>
+      </td></tr>
+
+      <tr><td style="padding:24px 36px 0;font:14px/1.7 Helvetica,Arial,sans-serif;color:#777777;">
+        Changed your mind? Totally fine &mdash; ignore this and it'll clear itself out.
+      </td></tr>
+
+      <tr><td style="padding:40px 36px 36px;font:12px/1.7 Helvetica,Arial,sans-serif;color:#9d9d9d;">
+        {{ shop_name }}<br>
+        <a href="{{ unsubscribe_url }}" style="color:#9d9d9d;">Unsubscribe</a> &nbsp;&middot;&nbsp;
+        <a href="{{ view_in_browser_url }}" style="color:#9d9d9d;">View in browser</a>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

@@ -184,14 +184,112 @@ The copy is Shep's now. The scaffold's draft marketing copy is gone.
 
 ## Pages
 
-- `index.html` — homepage, and the only page. Inline `<style>` with the
-  token block at the top. Sections: hero (drawing, headline, sub), the
-  letter, the install link, footer.
+- `index.html` — homepage. Inline `<style>` with the token block at the
+  top. Sections: hero (drawing, headline, sub), the letter, the install
+  link, footer.
+- `templates.html` — "A little inspo" (2026-10-14). Six example emails,
+  each with a *Copy prompt* button. See below. The **file name stays
+  `templates.html`** even though the page is no longer called that — the
+  URL is accurate either way and renaming it would break the link the day
+  anyone shares it.
+- `templates/*.html` — the six emails themselves, one file each. **No
+  front matter, on purpose**: a file without it is a Jekyll static file,
+  copied verbatim. Add front matter and Liquid eats every `{{ variable }}`
+  in the email.
 
 The letter runs at a 62ch measure in `.letter` and is set a notch larger
 than body copy — this is reading, not scanning. Shep's one-line beats
 ("Together.") are their own `<p>`, not `<br>`s, so they keep their air on a
 phone.
+
+## A little inspo
+
+The second page (2026-10-14). Shep's plan: the app makes you paste in your
+own HTML, so the site shows you six emails worth copying and hands you a
+prompt that gets you one.
+
+**The name and the body copy are Shep's**, replaced 2026-10-14. Nav link
+"A little inspo", h1 "A little inspiration never hurts...", and the
+paragraph running from "These templates cover the most common email
+layouts" to "by the truckload". Kept verbatim; the only edit was
+"Idiosync" → "idiosync" per the brand rule. The three-period "never
+hurts..." is his and matches the "Yeah... that." precedent in the letter,
+so it is not an ellipsis waiting to be fixed. It is one paragraph because
+that is how he wrote it — the beats ("Or best. Or both.") hold up inside
+the block.
+
+The working title through the build was "Fun with templates"; it survives
+in git history and nowhere else.
+
+**Why this doesn't contradict the product.** It is documentation, not a
+feature — it removes the hurdle the app deliberately keeps, rather than
+adding a whistle. That reading holds at **six, flat: no filters, no
+categories, no counts, no "more coming soon", no tiers.** Add any one of
+those and it becomes the template library the product is supposed to not
+have. The name is Shep's and the jokiness fits the letter's voice.
+
+**Copy prompt copies instructions *plus* the template's entire HTML.**
+Decided 2026-10-14, Claude's recommendation, Shep's call. Prose alone —
+"single column, cream, big serif headline" — gets the user their AI's guess
+at an email, not the one they clicked, and the gallery's whole promise is
+*that* email. It also splits the work correctly: email HTML (nested tables,
+inline styles, Outlook quirks) is what an AI is worst at from scratch, and
+rewriting copy is what it is best at. So the clipboard carries working
+markup and asks the AI to change only words, colours and images.
+
+The prompt text lives in `buildPrompt()` in `templates.html`. The three
+things it forbids are the three an AI "improves" unasked: tables → divs,
+inline styles → a `<style>` block, and tidying up merge variables it
+doesn't recognise. Each breaks the email somewhere between Outlook and send
+time. It also tells the AI to ask what the email is for before writing.
+
+**Thumbnails are the real emails in scaled-down iframes, not screenshots.**
+So a template can never drift from its picture, and there are no image
+assets to maintain. The cost is that the scale factor has to be measured
+(`setScale()`, plus a `ResizeObserver`), because it depends on the column
+width `auto-fill` lands on. Clicking one opens the same file full size in a
+`<dialog>`.
+
+**The variables are placeholders and MUST be swapped before launch.**
+`{{ first_name }}`, `{{ shop_name }}`, `{{ unsubscribe_url }}`,
+`{{ view_in_browser_url }}` are stand-ins — idiosync's real merge syntax
+wasn't to hand when this was built (Shep: "i can find later"). They are in
+all six files and named in the prompt text. `grep -rn "{{" templates/
+templates.html` finds every one. **Shipping these as-is means every email a
+user pastes back renders literal braces**, so this is a launch blocker, not
+a nicety. The unsubscribe variable is also what a Shopify listing review
+will look for.
+
+**Copying is verified up to the clipboard handoff, not through it.** The
+fetch and the prompt build were confirmed in the preview (3,446 chars of
+HTML → a 4,400 char prompt, variables intact), but both
+`navigator.clipboard.writeText` and the `execCommand` fallback need a
+focused document, and the preview pane never has focus. Click a button in a
+real browser once before trusting it. There are two routes (`toClipboard()`
+falls back to `legacyCopy()`) because the async API refuses on a secure
+context, a stale gesture *and* an unfocused document, all as
+`NotAllowedError`. Neither works over `file://` — `fetch` is blocked there
+too, so this page needs the preview server, unlike `index.html`.
+
+**The emails are not set in Bryndan.** They use Georgia and Helvetica
+stacks, because an email client can't load a self-hosted webfont and these
+are templates for other people's brands, not for idiosync. The site chrome
+around them is Bryndan as usual.
+
+**Chrome styles are duplicated between `index.html` and `templates.html`**
+— tokens, header, footer, the narrow-header fixes. A Jekyll layout is the
+right fix and the Jekyll section already says so, but the local preview
+server doesn't run Jekyll, so a layout can't be eyeballed before it ships.
+Do that refactor when there's a way to verify it; until then, **a change to
+the header or the tokens has to be made in both files.**
+
+**The homepage now has a third thing to click** (2026-10-14, Shep's call:
+header nav, beside the pill). That is a real amendment to the "exactly two
+things, both pointing at install" rule above. It is plain underlined text,
+not a second pill — one black button is the site's whole allowance for
+raising its voice and it belongs to install. Below 520px the text link
+drops out so the pill survives the narrow header; the footer carries the
+link as well, which is what keeps the page reachable on a phone.
 
 ## Design tokens
 
@@ -218,9 +316,11 @@ before it needs CSS.
   own `<title>`, description and canonical. If a second page type shows up,
   a layout with `{% seo %}` is the better move — that's what the heroes site
   does for its newsletter collection.
-- `index.html` carries empty front matter (`---` / `---`) so Jekyll
-  processes it. Keep it, even with no Liquid in the file — drop it and the
-  file ships unprocessed.
+- `index.html` and `templates.html` carry empty front matter (`---` /
+  `---`) so Jekyll processes them. Keep it, even with no Liquid in the
+  file — drop it and the file ships unprocessed. The opposite is true of
+  `templates/*.html`: those must NOT have front matter, or Liquid eats the
+  `{{ variable }}` tags in the emails.
 - `CNAME` → `idiosync.site` (apex). DNS has to point at GitHub's A records
   and the domain has to be set in repo Settings → Pages; the file alone is
   not enough.
