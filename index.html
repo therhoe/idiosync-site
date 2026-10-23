@@ -279,10 +279,14 @@
        costs something: mark + wordmark + "Install on Shopify" stopped
        fitting and pushed the whole page sideways. Both ends give a little
        rather than the pill wrapping or the name coming off the page. */
-    /* Three things in the header where there used to be two. The text
-       link is the one that gives way -- the pill has to survive, and the
-       templates page is linked again from the footer. */
-    @media (max-width: 520px) {
+    /* Four things in the header now: mark, two text links and the pill.
+       Both links give way together below 640px -- the pill has to survive,
+       and dropping one link but not the other leaves a lopsided header
+       that looks like a bug. The footer carries both, which is what keeps
+       the pages reachable on a phone. 640 rather than 520 because
+       "Pricing" plus "A little inspo" plus the pill in a wide face runs
+       out of room sooner than one link did. */
+    @media (max-width: 640px) {
       .site-nav a.nav-link { display: none; }
     }
 
@@ -475,6 +479,7 @@
         <span>idiosync</span>
       </a>
       <nav class="site-nav">
+        <a class="nav-link" href="pricing.html">Pricing</a>
         <a class="nav-link" href="templates.html">A little inspo</a>
         <a class="cta" href="#install">Install on Shopify</a>
       </nav>
@@ -570,7 +575,7 @@
 <footer>
   <div class="wrap">
     <span>&copy; 2026 idiosync</span>
-    <span><a href="templates.html">A little inspo</a> &nbsp;&middot;&nbsp; <a href="privacy-policy.html">Privacy</a></span>
+    <span><a href="pricing.html">Pricing</a> &nbsp;&middot;&nbsp; <a href="templates.html">A little inspo</a> &nbsp;&middot;&nbsp; <a href="privacy-policy.html">Privacy</a></span>
   </div>
 </footer>
 

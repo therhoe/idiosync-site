@@ -168,12 +168,13 @@ The copy is Shep's now. The scaffold's draft marketing copy is gone.
   Case; it was normalized to sentence case per the Style rule below, so if
   it ever reappears capitalized that is a deliberate reversal, not a
   regression. The "we / I" shift in the sub is his and is kept verbatim.
-- **No pricing anywhere.** The placeholder panel went with the rest. The
-  letter doesn't name a price and the page no longer asks. When Shep
-  confirms a number, that is a new decision about where it goes — not a
-  matter of restoring the old panel.
+- **Pricing is on its own page, not the homepage** (2026-10-23). The old
+  placeholder panel went with the cards and did not come back; what came
+  back instead is a real calculator on `pricing.html`. The letter still
+  doesn't name a price and the homepage still doesn't ask — that was the
+  point of deleting the panel, and it survives.
 - **"Install on Shopify" links go to `#install`**, a dead anchor, because
-  the app has no App Store listing URL yet. Two places now (header pill,
+  the app has no App Store listing URL yet. Four places now (header pill,
   the link under the letter); swap both when the listing exists.
 - **Two images, both line art.** `paper-plane.png` (hero, 1200px wide) and
   `logo.png` — black strokes on transparency, trimmed to the artwork. Any
@@ -206,6 +207,8 @@ The copy is Shep's now. The scaffold's draft marketing copy is gone.
   `templates.html`** even though the page is no longer called that — the
   URL is accurate either way and renaming it would break the link the day
   anyone shares it.
+- `pricing.html` — "One-size-fits-noone" (2026-10-23). The credit
+  calculator, rebuilt from the one in the Shopify app. See below.
 - `templates/*.html` — the six emails themselves, one file each. **No
   front matter, on purpose**: a file without it is a Jekyll static file,
   copied verbatim. Add front matter and Liquid eats every `{{ variable }}`
@@ -260,10 +263,21 @@ and redeployed as a new version. A plain Save in the Apps Script editor
 does not update what the deployed URL serves — that is the most common
 way this looks broken when it isn't.
 
-**`BETA_ENDPOINT` is still empty, so nothing is collected yet.** Paste the
-deployed `/exec` URL into it in `index.html`. Until then a submit opens
-the visitor's mail client, which works and collects nothing. Alongside the
-merge variables in `templates/`, this is the second launch blocker.
+**It is live and collecting** (2026-10-23). `BETA_ENDPOINT` in
+`index.html` holds the deployed `/exec` URL; a signup appends a row and
+the page says so. Emptying the constant falls back to opening the
+visitor's mail client, which works and collects nothing.
+
+**Getting there took a detour worth recording.** The deployment read
+"Who has access: Anyone" and still returned 403 Access Denied to every
+anonymous request, because the Workspace domain
+(therealheroesofecommerce.com, Google MX) blocks public access above the
+script's own setting — nothing inside Apps Script can override it. If this
+ever returns, the symptom is a 403 with `<title>Access Denied</title>` on
+a plain GET of the `/exec` URL, and the fix is in the Workspace admin
+console under Drive and Docs → Sharing settings, not in the script. The
+fallback, if that is ever locked down again, is to own the script from a
+personal Google account instead.
 
 **The POST sends `Content-Type: text/plain` and that is deliberate.** It
 is JSON in the body, and the Apps Script parses it itself. A real
@@ -364,12 +378,14 @@ stacks, because an email client can't load a self-hosted webfont and these
 are templates for other people's brands, not for idiosync. The site chrome
 around them is Bryndan as usual.
 
-**Chrome styles are duplicated between `index.html` and `templates.html`**
-— tokens, header, footer, the narrow-header fixes. A Jekyll layout is the
-right fix and the Jekyll section already says so, but the local preview
-server doesn't run Jekyll, so a layout can't be eyeballed before it ships.
-Do that refactor when there's a way to verify it; until then, **a change to
-the header or the tokens has to be made in both files.**
+**Chrome styles are duplicated across `index.html`, `templates.html` and
+`pricing.html`** — tokens, header, footer, the narrow-header fixes. A
+Jekyll layout is the right fix and the Jekyll section already says so, but
+the local preview server doesn't run Jekyll, so a layout can't be
+eyeballed before it ships. Do that refactor when there's a way to verify
+it; until then, **a change to the header or the tokens has to be made in
+all three files.** See "The header, now that there are four things in it"
+below.
 
 **The homepage now has a third thing to click** (2026-10-14, Shep's call:
 header nav, beside the pill). That is a real amendment to the "exactly two
@@ -378,6 +394,86 @@ not a second pill — one black button is the site's whole allowance for
 raising its voice and it belongs to install. Below 520px the text link
 drops out so the pill survives the narrow header; the footer carries the
 link as well, which is what keeps the page reachable on a phone.
+
+## Pricing
+
+`pricing.html`, added 2026-10-23 at Shep's request, rebuilt from the
+pricing screen in the Shopify app so the two agree on sight.
+
+**Why this doesn't contradict "no pricing anywhere".** That rule was about
+the homepage: the panel that got deleted was a placeholder with no number
+behind it, sitting on a page whose argument is "leave as fast as you can",
+and it was arguing back. This is a real number on its own page, found by
+someone who went looking for it. The homepage still names no price.
+
+**The headline is Shep's: "One-size-fits-noone".** He finds it funny and
+it is kept exactly as he spelled it. Standard English would be "no one",
+two words; per the Style rule this is a creative spelling, so it is
+flagged here and left verbatim rather than quietly corrected. The joke
+also does real work — it is the pay-as-you-go argument in four words.
+
+**The paragraph under it is Claude's placeholder and should be replaced.**
+Everything else on this site is in Shep's voice and this is the one block
+that isn't. It says the plain facts (no subscription, no plan to outgrow,
+rate drops as you buy more) and nothing more, deliberately, so there is
+less to unpick when his version arrives.
+
+**The pricing is graduated, not flat.** 25,000 emails is 10,000 at $5 plus
+15,000 at $4 = **$110**, not 25,000 at $4 = $100. This is the one thing to
+get right in the calculator: the flat reading is the intuitive one and it
+is wrong. The page says so in the app's own words — "Lower rates apply
+only to credits in each band of this purchase."
+
+The bands, as of 2026-10-23:
+
+| band | rate |
+| --- | --- |
+| First 10,000 | $5 / 1,000 |
+| Next 40,000 | $4 / 1,000 |
+| Above 50,000 | $3 / 1,000 |
+
+Sold in 1,000-email increments, 1,000 minimum, 300,000 maximum per
+purchase. Below the minimum or above the cap, the field snaps on blur;
+a non-multiple of 1,000 rounds to the nearest.
+
+**The rates live in two places and both have to change together**: the
+`BANDS` array in the inline script, and the hand-written Pricing guide
+table in the markup. The table is typed out rather than generated because
+three static rows are easier to read in the source than a loop that
+produces them; the cost of that is this note. There are comments on both.
+
+**The amount field is `type="text"`, not `type="number"`**, so the resting
+value can show "25,000" the way the app's does — a number input refuses a
+thousands separator. `inputmode="numeric"` still gets the number pad on a
+phone, and the min/max/step are enforced in `snap()`. The field reformats
+on blur, not on every keystroke: snapping as you type rewrites "2" into
+"1,000" before you reach the 5.
+
+**Verbatim from the app**, and worth keeping that way so the site and the
+app don't drift: "Credits are sold in 1,000-email increments, up to
+300,000 per purchase", "Lower rates apply only to credits in each band of
+this purchase", "USD, before any applicable tax", and the three rows of
+the pricing guide.
+
+**No checkout.** The app's screen has a disabled "Purchases are not
+enabled yet" button; the site has a text link to `#install` instead.
+Buying happens in Shopify, so a button here would be a second black pill
+promising something this page cannot do.
+
+## The header, now that there are four things in it
+
+Mark, "Pricing", "A little inspo", and the install pill. Bryndan is wide
+and this is the row where that costs something, so **both text links drop
+out together below 640px** (it was 520px when there was one link). They go
+together on purpose — dropping one and keeping the other leaves a lopsided
+header that reads as a bug. The footer carries both links on every page,
+which is what keeps the site navigable on a phone.
+
+That breakpoint and the whole chrome block are now duplicated in **three**
+files: `index.html`, `templates.html`, `pricing.html`. A Jekyll layout is
+still the right fix and still can't be eyeballed on the static preview
+server. Until then, a change to the header or the tokens is a change to
+three files.
 
 ## Design tokens
 

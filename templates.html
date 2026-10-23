@@ -274,11 +274,11 @@
       .intro { padding-top: 48px; }
       .grid { gap: 40px 20px; }
     }
-    /* Bryndan is wide. Three things in the header instead of two makes the
-       narrow case tighter than index.html's -- the text link drops out
-       below 520px, because the pill is the one that has to survive and
-       this page is still reachable from the homepage. */
-    @media (max-width: 520px) {
+    /* Bryndan is wide, and there are two text links beside the pill now.
+       Both drop out together below 640px so the pill survives; the footer
+       carries them. Same breakpoint and same reasoning in index.html and
+       pricing.html -- change one, change all three. */
+    @media (max-width: 640px) {
       .site-nav a.nav-link { display: none; }
     }
     @media (max-width: 420px) {
@@ -299,6 +299,7 @@
         <span>idiosync</span>
       </a>
       <nav class="site-nav">
+        <a class="nav-link" href="pricing.html">Pricing</a>
         <a class="nav-link" href="templates.html">A little inspo</a>
         <a class="cta" href="#install">Install on Shopify</a>
       </nav>
@@ -338,7 +339,7 @@
 <footer>
   <div class="wrap">
     <span>&copy; 2026 idiosync</span>
-    <span><a href="privacy-policy.html">Privacy</a></span>
+    <span><a href="pricing.html">Pricing</a> &nbsp;&middot;&nbsp; <a href="privacy-policy.html">Privacy</a></span>
   </div>
 </footer>
 
