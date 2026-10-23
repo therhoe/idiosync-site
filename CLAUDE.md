@@ -55,30 +55,44 @@ than it sounds. Concretely, the homepage has:
 Before adding anything to this site, ask whether the thing you're adding is
 the kind of thing the product refuses to ship. If it is, don't.
 
-## Hosting — temporary URL (2026-10-13)
+## Hosting — live on the apex (2026-10-23)
 
-The site is served from GitHub Pages at
-**https://therhoe.github.io/idiosync-site/**, a *project* URL, not the
-apex. The custom domain comes later.
+The site is served from GitHub Pages at **https://idiosync.site**, the
+apex. The temporary project URL,
+`https://therhoe.github.io/idiosync-site/`, still answers and is not worth
+removing.
 
-**`CNAME` was deleted on purpose.** With a `CNAME` file present, Pages sets
-the custom domain and redirects the github.io URL to `idiosync.site` — which
-has no DNS yet, so the site would look dead. The file comes back the same
-day DNS does.
+**DNS is at Hostinger**, on its own nameservers (`atlas.dns-parking.com`,
+`hyperion.dns-parking.com`) — the domain was never moved to another
+registrar, only repointed. The zone is:
 
-Because it is a project URL, everything under it lives at
-`/idiosync-site/`, so **all paths in `index.html` must stay relative**
-(`assets/...`, `logo.png`, `./`). A leading `/` points at the top of
-`therhoe.github.io` and breaks. Both absolute links that existed are now
-relative.
+- `@` → GitHub's four apex A records, `185.199.108.153` through
+  `185.199.111.153`. All four; one is a single point of failure.
+- `www` → CNAME to `therhoe.github.io` (not to the apex, and never to a
+  path — a CNAME points at a host). Pages 301s `www` to the apex itself.
+- nothing else. No MX, no TXT, no CAA. Hostinger's own parking records —
+  an `@` A record at `2.57.91.91` and a `www` CNAME to the apex — were
+  deleted, not left alongside; a leftover `@` A record would have split
+  traffic between Hostinger and GitHub at random.
 
-Still pointing at the apex, correct for the final site and harmless on the
-temporary one: `canonical` in `index.html`, `url:` in `_config.yml`, and
-the sitemap line in `robots.txt`.
+Zone TTL is 600s, so a DNS change here shows up in about ten minutes.
 
-**To hook up the domain later:** restore `CNAME` containing `idiosync.site`,
-point DNS at GitHub's apex A records, set the custom domain in Settings →
-Pages, then tick Enforce HTTPS once it verifies.
+**Don't press "Reset to Hostinger defaults"** in hPanel's DNS editor, and
+if `idiosync.site` ever appears under hPanel → Websites, disconnect it —
+a website connection can silently re-add the parking records over these.
+
+**`CNAME` is back** (committed by GitHub itself, `6f95b37`, when the custom
+domain was saved in Settings → Pages). It contains `idiosync.site`.
+Deleting it hands the site back to the project URL and breaks every link
+anyone has.
+
+**Paths in the HTML are still relative** (`assets/...`, `logo.png`, `./`).
+On the apex a leading `/` would now work, so this is no longer load-bearing
+— but relative paths are what keep the project URL working as a fallback,
+and there's no reason to churn them.
+
+`canonical` in both HTML files, `url:` in `_config.yml` and the sitemap
+line in `robots.txt` all point at the apex, and now match reality.
 
 ## Type
 
@@ -201,6 +215,80 @@ The letter runs at a 62ch measure in `.letter` and is set a notch larger
 than body copy — this is reading, not scanning. Shep's one-line beats
 ("Together.") are their own `<p>`, not `<br>`s, so they keep their air on a
 phone.
+
+## The beta box
+
+Added 2026-10-23, Shep's call. A fixed panel at the top right of the
+homepage — "I wanna be a beta tester" and an email field — that stays put
+once the letter scrolls past.
+
+It sits one header-padding (14px) below the header rule, which is the same
+gap the install pill has above it, so at the top of the page the two are
+evenly spaced either side of the line. That number is `--header-h` plus
+14px in `index.html`. **`--header-h` is hardcoded** (14 + the 44px pill +
+14 + the 1px rule = 73px, and 67px below 420px where the pill shrinks). If
+the bar's padding or the pill's height ever changes, this has to change
+with it or the box drifts off the line.
+
+**It is not a second black pill, deliberately.** One filled button is this
+site's whole allowance for raising its voice and it belongs to install, so
+the box is white with a hairline border and the submit is underlined text.
+A fixed panel is already the loudest thing added to this page since the
+cards came off it. It does not also need a fill — and if it ever gets one,
+the install pill stops being the one loud thing and the header starts
+reading as a toolbar.
+
+**Below 920px it collapses** to "beta tester?" and a chevron, and opens on
+tap. 920 is not a phone breakpoint, it is where the letter's 62ch measure
+and a 300px panel stop fitting side by side — at 930px there is 38px of
+clearance and that is as tight as it gets. Don't raise it.
+
+The open/close is a `0fr` → `1fr` grid row (so it animates to the panel's
+real height, never a max-height guess) plus a width transition from 150px
+to 268px. **150px is measured** — "beta tester?" and the chevron set in
+Bryndan, rounded up. Change that label and it has to be remeasured; there
+is no CSS way to animate from a content-sized width, which is why the
+number is there at all.
+
+**Signups go to a Google Sheet**, through an Apps Script web app (Shep's
+call, 2026-10-23, after weighing Formspree — free tier caps at 50/month
+and the list would live on someone else's server). The script is
+`.claude/scripts/beta-signups.gs`; that file is the source of record and
+carries the setup steps in its header, but **the copy that runs lives in
+Google**, so editing the file here changes nothing until it is pasted in
+and redeployed as a new version. A plain Save in the Apps Script editor
+does not update what the deployed URL serves — that is the most common
+way this looks broken when it isn't.
+
+**`BETA_ENDPOINT` is still empty, so nothing is collected yet.** Paste the
+deployed `/exec` URL into it in `index.html`. Until then a submit opens
+the visitor's mail client, which works and collects nothing. Alongside the
+merge variables in `templates/`, this is the second launch blocker.
+
+**The POST sends `Content-Type: text/plain` and that is deliberate.** It
+is JSON in the body, and the Apps Script parses it itself. A real
+`application/json` header makes the browser send a CORS preflight, Apps
+Script does not answer `OPTIONS`, and the request dies before the data
+leaves. Don't "fix" the header.
+
+**Failure is visible, not swallowed.** If the post fails — Google down, a
+redeploy in progress, the URL archived — the box says so and offers a
+mailto link rather than claiming success. The typed address is kept so
+nobody retypes it. Worth preserving: the tempting shortcut here is
+`mode: 'no-cors'`, which makes every response opaque and so makes every
+failure look like a success.
+
+**The endpoint is public and there is a honeypot because of it.** A static
+page cannot hold a secret, so anyone who views source can post to the
+sheet. The form carries a hidden, un-tabbable `company` field; anything
+that fills it gets the success message and is silently dropped. The script
+also shape-checks the address and dedupes case-insensitively. If it ever
+does get flooded, archive the deployment and deploy a fresh URL.
+
+**The homepage only.** `templates.html` does not have the box, which is a
+real inconsistency given the two pages otherwise share their chrome — see
+the note in the inspo section about the duplication. Adding it means
+copying the CSS, the markup and the script into the second file.
 
 ## A little inspo
 

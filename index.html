@@ -80,6 +80,13 @@
       --maxw: 1040px;
       --gutter: 24px;
       --control-height: 44px;
+      /* The header's full height: 14px padding, the 44px pill, 14px
+         padding, the 1px rule. The beta box hangs one more 14px below
+         that, so it clears the rule by exactly as much as the pill clears
+         it from above. Both numbers move together -- change the pill's
+         height or the bar's padding and these have to follow. */
+      --header-h: 73px;
+      --beta-top: calc(var(--header-h) + 14px);
       /* The face has ONE weight. Anything asking for bold gets a
          browser-synthesized smear, so nothing on this page sets a weight
          above 500 -- see the note on .hero h1. */
@@ -278,11 +285,183 @@
     @media (max-width: 520px) {
       .site-nav a.nav-link { display: none; }
     }
+
+    /* --- the beta box --------------------------------------------------
+       Shep's call, 2026-10-23. A fixed panel at the top right, so it is
+       still there when the letter has scrolled past.
+
+       It sits one header-padding below the rule -- the same 14px the
+       install pill has ABOVE the rule -- so at the top of the page the
+       pill and the box are evenly spaced either side of the line. That is
+       what `--beta-top` is: the header's own height plus that one gap. If
+       the header's height changes, change it here too, or the box drifts
+       off the line.
+
+       It is deliberately NOT a second black pill. One filled button is
+       this site's whole allowance for raising its voice and it belongs to
+       install, so this is a white box with a hairline border and the Send
+       is underlined text. A fixed panel is already the loudest thing added
+       to this page since the cards came off it; it does not also need a
+       fill.
+
+       The rail is full-width and click-through (`pointer-events: none`) so
+       it can borrow `.wrap` and line the box's right edge up with the
+       pill's, rather than guessing at an offset from the window.
+       ------------------------------------------------------------------ */
+    .beta-rail {
+      position: fixed;
+      top: var(--beta-top);
+      left: 0;
+      right: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .beta-rail .wrap { display: flex; justify-content: flex-end; }
+    .beta {
+      pointer-events: auto;
+      width: 300px;
+      max-width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .beta-title {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .beta-form { display: flex; align-items: center; gap: 10px; }
+    .beta-form input {
+      flex: 1 1 auto;
+      min-width: 0;          /* a flex input will not shrink below its size
+                                attribute without this, and pushes Send out */
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;  /* inputs do not inherit the page face */
+      font-size: 0.95rem;
+    }
+    .beta-form input::placeholder { color: var(--text); opacity: .45; }
+    /* The honeypot -- see the note on it in the markup. Pushed out of the
+       viewport rather than `display: none`, because the cruder bots skip
+       fields that are display:none and fill in everything else. Absolute,
+       so it also leaves the form's flex row entirely. */
+    .beta-hp {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .beta-form input:focus-visible,
+    .beta-toggle:focus-visible,
+    .beta-send:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 1px;
+    }
+    .beta-send {
+      flex: 0 0 auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+      cursor: pointer;
+    }
+    .beta-send:hover { text-decoration-thickness: 2px; }
+    /* Empty until the form says something, so it takes no room at rest. */
+    .beta-note {
+      margin: 8px 0 0;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .beta-note:empty { display: none; }
+
+    /* The toggle is the whole box on a narrow screen and does not exist on
+       a wide one -- where the panel is simply always open. */
+    .beta-toggle { display: none; }
+
+    /* --- the beta box, narrow ------------------------------------------
+       Below this width the letter's 62ch measure and a 300px panel stop
+       fitting side by side, so the box collapses to "beta tester?" and a
+       chevron, and opens on tap (Shep's call, 2026-10-23).
+
+       The open/close is a 0fr -> 1fr grid row rather than a max-height
+       guess, so it animates to the panel's real height and never clips the
+       input or leaves dead space under it. The inner div needs
+       `overflow: hidden` for that to read as a wipe.
+       ------------------------------------------------------------------ */
+    @media (max-width: 920px) {
+      /* Closed, the box is just wide enough for "beta tester?" and the
+         chevron -- 135px of it measured in Bryndan, rounded up for slack.
+         It is a hardcoded number because there is no CSS way to animate
+         from a content-sized width, and the alternative (letting the
+         closed box stay as wide as the panel it is hiding) puts a 268px
+         slab over the letter on a 375px screen. CHANGE THE LABEL AND THIS
+         HAS TO BE REMEASURED. If the face fails to load the fallback is
+         narrower, so it degrades to a little extra padding, not a clip. */
+      .beta {
+        width: 268px;
+        max-width: 100%;
+        padding: 0;
+        overflow: hidden;      /* the inner panel keeps its full width
+                                  while the box narrows, so the form does
+                                  not reflow mid-animation */
+        transition: width .45s ease;
+      }
+      .beta[data-open="false"] { width: 150px; }
+      .beta-panel-inner { width: 268px; }
+      .beta-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 10px 14px;
+        border: 0;
+        border-radius: var(--radius);
+        background: none;
+        color: inherit;
+        font-family: inherit;
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+      .beta-chevron { transition: transform .45s ease; }
+      .beta[data-open="true"] .beta-chevron { transform: rotate(180deg); }
+      .beta-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows .45s ease;
+      }
+      .beta[data-open="true"] .beta-panel { grid-template-rows: 1fr; }
+      .beta-panel > .beta-panel-inner { overflow: hidden; }
+      /* The toggle already says it; the heading would be the same words
+         twice in a box this small. */
+      .beta-title { display: none; }
+      .beta-form { padding: 0 14px 14px; }
+      .beta-note { padding: 0 14px 12px; margin-top: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .beta, .beta-panel, .beta-chevron { transition: none; }
+    }
+
     @media (max-width: 420px) {
       .site-header .bar { gap: 10px; }
       .brand { gap: 7px; font-size: 1.05rem; }
       .brand img { height: 20px; }
       .site-nav a.cta { height: 38px; padding: 0 12px; font-size: 0.85rem; }
+      /* The pill shrinks to 38px here, so the rule moves up and the beta
+         box has to move with it: 14 + 38 + 14 + 1. */
+      :root { --header-h: 67px; }
     }
   </style>
 </head>
@@ -302,6 +481,42 @@
     </div>
   </div>
 </header>
+
+<!-- The beta box. Fixed at the top right, one gap below the header rule;
+     see the CSS for why it is a white box and not a second black pill.
+     Collapses to "beta tester?" and a chevron below 920px. -->
+<div class="beta-rail">
+  <div class="wrap">
+    <div class="beta" id="beta" data-open="false">
+      <button class="beta-toggle" type="button" aria-expanded="false" aria-controls="beta-panel">
+        <span>beta tester?</span>
+        <!-- aria-hidden: the button's text already says it. -->
+        <svg class="beta-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+          <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="beta-panel" id="beta-panel">
+        <div class="beta-panel-inner">
+          <p class="beta-title">I wanna be a beta tester</p>
+          <form class="beta-form" id="beta-form" novalidate>
+            <input type="email" id="beta-email" name="email" autocomplete="email"
+                   placeholder="you@yourshop.com" aria-label="Your email address" required>
+            <!-- Honeypot. Hidden from sight and from the tab order, and
+                 named something a bot will want to fill in. A real person
+                 cannot reach it; anything that does is not a person, and
+                 the script drops the submission without saying so. It is
+                 `aria-hidden` AND `tabindex="-1"` so a screen reader user
+                 never lands in it by accident. Do not add a label. -->
+            <input type="text" class="beta-hp" name="company" tabindex="-1"
+                   autocomplete="off" aria-hidden="true">
+            <button type="submit" class="beta-send">Send</button>
+          </form>
+          <p class="beta-note" id="beta-note" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main>
 
@@ -358,6 +573,125 @@
     <span><a href="templates.html">A little inspo</a> &nbsp;&middot;&nbsp; <a href="privacy-policy.html">Privacy</a></span>
   </div>
 </footer>
+
+<script>
+/* The beta box.
+
+   Signups go to a Google Sheet, via an Apps Script web app. The script is
+   kept in `.claude/scripts/beta-signups.gs` -- that file is the source of
+   record and has the setup and redeploy steps in its header. The copy
+   that actually runs lives in Google.
+
+   `BETA_ENDPOINT` is the deployed /exec URL. It is public by necessity --
+   a static page cannot hold a secret -- so it is not a credential and
+   there is nothing to leak by having it here; see the honeypot. If it is
+   ever emptied, the form falls back to opening the visitor's mail client,
+   which works and collects nothing. */
+(function () {
+  var BETA_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwsOxDZJt9btzZ47Xeax1Y1ETJ4Bn7npWPrsiTFa_KphpCjLJy6FQSqUKNdL3lMZwbH/exec';
+
+  var box    = document.getElementById('beta');
+  var toggle = box.querySelector('.beta-toggle');
+  var form   = document.getElementById('beta-form');
+  var email  = document.getElementById('beta-email');
+  var note   = document.getElementById('beta-note');
+  var send   = form.querySelector('.beta-send');
+  var hp     = form.querySelector('.beta-hp');
+
+  /* Open/close is a data attribute so the CSS owns the animation; the
+     button only reports state. The panel is always open above 920px --
+     the toggle is display:none there and never fires. */
+  toggle.addEventListener('click', function () {
+    var open = box.dataset.open !== 'true';
+    box.dataset.open = open ? 'true' : 'false';
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) email.focus();
+  });
+
+  function say(msg) { note.textContent = msg; }
+
+  /* The address is assembled rather than written into the markup, so it is
+     not sitting in the page source for a scraper to lift. */
+  function mailtoHref(value) {
+    return 'mailto:' + ['shep', 'therealheroesofecommerce.com'].join('@') +
+      '?subject=' + encodeURIComponent('idiosync beta tester') +
+      '&body=' + encodeURIComponent('I wanna be a beta tester.\n\n' + value + '\n');
+  }
+
+  /* When the post fails there is nothing useful the visitor can do about
+     it, so hand them the other route rather than asking them to try again
+     into the same hole. Built as DOM nodes, not an HTML string -- `value`
+     is whatever they typed. */
+  function sayWithFallback(msg, value) {
+    say(msg + ' ');
+    var a = document.createElement('a');
+    a.href = mailtoHref(value);
+    a.textContent = 'Email us instead';
+    note.appendChild(a);
+  }
+
+  var sending = false;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (sending) return;
+
+    var value = email.value.trim();
+
+    /* The honeypot is invisible and out of the tab order, so a human
+       cannot have filled it. Say the same thing a success says: a bot
+       told it was caught is a bot that comes back differently. */
+    if (hp && hp.value) {
+      form.reset();
+      say('You’re on the list. Thanks.');
+      return;
+    }
+
+    /* `novalidate` on the form, so this is the only check in the browser.
+       Deliberately loose -- a shape test, not a rulebook. Anything
+       stricter rejects real addresses. The Apps Script checks again,
+       because this one is a courtesy to the typist, not a gate. */
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value)) {
+      say('That address looks off — mind checking it?');
+      email.focus();
+      return;
+    }
+
+    /* No endpoint pasted in yet. */
+    if (!BETA_ENDPOINT) {
+      window.location.href = mailtoHref(value);
+      say('Opening your mail app…');
+      return;
+    }
+
+    sending = true;
+    send.disabled = true;
+    say('Sending…');
+
+    fetch(BETA_ENDPOINT, {
+      method: 'POST',
+      /* text/plain keeps this a "simple" request, so the browser sends no
+         CORS preflight. That matters: an Apps Script web app does not
+         answer OPTIONS, so a preflight fails the request outright and the
+         JSON never leaves. The script reads the raw body and parses it
+         itself, so the header is a lie about the content on purpose. */
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ email: value, source: 'idiosync.site' })
+    }).then(function (r) {
+      return r.json();
+    }).then(function (data) {
+      if (!data || !data.ok) throw new Error(data && data.error || 'rejected');
+      form.reset();
+      say('You’re on the list. Thanks.');
+    }).catch(function () {
+      sayWithFallback('That didn’t send.', value);
+    }).then(function () {
+      sending = false;
+      send.disabled = false;
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
