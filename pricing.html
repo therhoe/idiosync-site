@@ -59,6 +59,15 @@
       --gutter: 24px;
       --control-height: 44px;
       --font: "Bryndan Write", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      /* The calculator is set in this instead (Shep's call, 2026-10-23).
+         A drawn face is right for a letter and wrong for a column of
+         figures -- it is wide, it has one weight, and its digits are not
+         tabular, so prices in a list do not line up under each other. No
+         webfont: this is the machine's own UI face, which costs nothing
+         to load and is the one sans every reader already finds neutral.
+         Self-hosting Open Sans would pin the look across machines at the
+         cost of another font file; the stack was judged near enough. */
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -153,17 +162,30 @@
       padding-block: 40px 0;
       align-items: start;
     }
+    /* Everything inside a panel is in the UI face, headings included --
+       a Bryndan heading over system-sans figures reads as two pages
+       stitched together. The split is panel / not-panel, so the headline
+       and the paragraph above stay in the drawn face and the site still
+       sounds like itself. */
     .panel {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
       padding: 24px;
+      font-family: var(--font-ui);
+      /* Fixed-width digits, so $50 and $160 line up on the decimal and
+         the column does not shuffle as the number changes. */
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+      font-size: 0.975rem;
     }
     .panel h2 {
       margin: 0 0 18px;
-      font-size: 1.25rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
+      font-size: 1.1rem;
+      /* The UI stack has real weights, unlike Bryndan, so this one place
+         can use a genuine 600 rather than leaning on scale. */
+      font-weight: 600;
+      letter-spacing: -0.01em;
     }
     .field-label {
       display: block;
@@ -179,8 +201,9 @@
       background: var(--surface);
       color: var(--text);
       font-family: inherit;   /* inputs do not inherit the page face */
-      font-size: 1.35rem;
-      letter-spacing: -0.01em;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0;
     }
 
     .presets {
@@ -246,14 +269,14 @@
       padding-top: 18px;
       border-top: 1px solid var(--border);
     }
-    .credits .sum h3 { margin: 0; font-size: 1.25rem; font-weight: 500; }
-    .credits .sum .total { font-size: 2rem; letter-spacing: -0.03em; line-height: 1; }
-    .credits .count { margin: -12px 0 18px; font-size: 1.0625rem; }
+    .credits .sum h3 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+    .credits .sum .total { font-size: 1.9rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+    .credits .count { margin: -12px 0 18px; font-size: 1rem; }
 
     /* A text link, not a filled button -- same call as the one under the
        letter on the homepage. One black pill is the site's allowance and
        the header is already spending it. */
-    .buy { margin: 22px 0 0; font-size: 1.0625rem; }
+    .buy { margin: 22px 0 0; font-size: 1rem; }
     .buy a {
       text-decoration: underline;
       text-underline-offset: 4px;

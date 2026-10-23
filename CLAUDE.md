@@ -96,9 +96,14 @@ line in `robots.txt` all point at the apex, and now match reality.
 
 ## Type
 
-The whole page is set in **Bryndan Write** (Shep's pick, 2026-10-13),
+The site is set in **Bryndan Write** (Shep's pick, 2026-10-13),
 self-hosted at `assets/fonts/bryndan-write.woff2`. It replaced the system
 stack the scaffold shipped with.
+
+**One exception, as of 2026-10-23:** the calculator panels on
+`pricing.html` are in a system sans. See the Pricing section for why and
+for where exactly the boundary sits. Everything else — every page, all
+the chrome, both other pages entirely — is Bryndan.
 
 **Where it came from.** A freeware TrueType upload on FontSpace
 (`bryndan-write-font-f25017`), uploaded 2016 by a pseudonymous account
@@ -454,6 +459,27 @@ app don't drift: "Credits are sold in 1,000-email increments, up to
 300,000 per purchase", "Lower rates apply only to credits in each band of
 this purchase", "USD, before any applicable tax", and the three rows of
 the pricing guide.
+
+**The calculator is NOT set in Bryndan** (Shep's call, 2026-10-23: "since
+we are mathing on this, lets make the font less fun"). Everything inside
+the two panels — headings, labels, figures, the install link — is in
+`--font-ui`, the machine's own UI sans. A drawn face is right for a
+letter and wrong for a column of prices: it is wide, it has one weight,
+and its digits are not tabular, so figures in a list don't line up under
+each other. The panels set `font-variant-numeric: tabular-nums` for the
+same reason.
+
+**The split is panel / not-panel**, and that is the whole rule. The
+headline, the paragraph and the site chrome stay in Bryndan, so the page
+still sounds like the rest of the site; the calculator reads like the app
+it mirrors. Don't let the boundary drift — a Bryndan heading sitting over
+system-sans figures looks like two pages stitched together.
+
+**No webfont was added for this.** `--font-ui` is a plain system stack,
+which costs nothing to load and keeps the site's zero-external-requests
+property. Self-hosting Open Sans would pin the look across machines at
+the cost of another font file; judged not worth it, but that is the move
+if the rendering differences ever matter.
 
 **No checkout.** The app's screen has a disabled "Purchases are not
 enabled yet" button; the site has a text link to `#install` instead.
