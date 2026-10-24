@@ -103,11 +103,18 @@
       --maxw: 1040px;
       --gutter: 24px;
       --control-height: 44px;
-      /* The header's full height: 14px padding, the 44px pill, 14px
-         padding, the 1px rule. The beta box hangs one more 14px below
-         that, so it clears the rule by exactly as much as the pill clears
-         it from above. Both numbers move together -- change the pill's
-         height or the bar's padding and these have to follow. */
+      /* The header's full height: 14px padding, a 44px row, 14px padding,
+         the 1px rule. That 44px used to be the install pill; with the pill
+         gone .bar holds the row open at --control-height instead, so this
+         number did NOT change when the pill came off and the beta box did
+         not move. Keeping the height was the point -- letting the header
+         collapse to the wordmark would have dragged the rule and the box
+         up with it for no reason anyone asked for.
+
+         The beta box hangs one more 14px below the rule, so it clears the
+         line by exactly as much as the row above does. All three numbers
+         move together -- change the bar's padding or the row height and
+         these have to follow. */
       --header-h: 73px;
       --beta-top: calc(var(--header-h) + 14px);
       /* The face has ONE weight. Anything asking for bold gets a
@@ -135,8 +142,10 @@
     .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
 
     /* --- header --------------------------------------------------------
-       Wordmark left, the install pill right. Not sticky: nothing here is
-       urgent enough to follow you down the page.
+       Wordmark left, two text links right. The install pill that used to
+       close this row came off on 2026-10-24 -- the app has no App Store
+       listing yet, so there was nothing behind it. Not sticky: nothing
+       here is urgent enough to follow you down the page.
 
        The header is the same white as the page -- no bar, no fill, just a
        rule. That rule lives on `.bar`, inside the wrap's gutter, so it
@@ -157,6 +166,13 @@
       justify-content: space-between;
       gap: 20px;
       padding-block: 14px;
+      /* The bar IS --header-h tall, by definition, at every width. Until
+         2026-10-24 that height was a side effect of the 44px install pill
+         sitting in the row; with the pill gone the tallest thing left is
+         the wordmark and the header would have collapsed to ~61px,
+         dragging the rule -- and the beta box pinned to it -- up with it.
+         Border-box, so this is the whole 14 + 44 + 14 + 1. */
+      min-height: var(--header-h);
       border-bottom: 1px solid var(--border);
     }
     .brand {
@@ -173,9 +189,11 @@
       height: 24px;
       width: auto;
     }
-    /* Two things in the nav now. The templates link is plain underlined
-       text, not a second pill -- one black button is the site's whole
-       allowance for raising its voice, and it belongs to install. */
+    /* Two text links, and nothing else. The black install pill used to sit
+       on the end of this row; it came off 2026-10-24 because the app has
+       no App Store listing to send anyone to. Nothing on this page raises
+       its voice any more -- see the note above .beta-rail before you give
+       that allowance to something else. */
     .site-nav { display: inline-flex; align-items: center; gap: 22px; }
     .site-nav a.nav-link {
       font-size: 0.95rem;
@@ -185,22 +203,6 @@
       white-space: nowrap;
     }
     .site-nav a.nav-link:hover { text-decoration-thickness: 2px; }
-    .site-nav a.cta {
-      display: inline-flex;
-      align-items: center;
-      height: var(--control-height);
-      padding: 0 18px;
-      border-radius: 8px;
-      color: var(--ink-text);
-      background: var(--ink);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      white-space: nowrap;   /* a multi-word pill wraps to two lines and
-                                breaks the header's single row */
-      transition: opacity .15s ease;
-    }
-    .site-nav a.cta:hover { opacity: .85; }
 
     /* --- hero ----------------------------------------------------------
        Asset paths here are relative (`paper-plane.png`, not
@@ -265,23 +267,6 @@
     }
     .letter .signoff { margin-top: 34px; }
 
-    /* --- the one link --------------------------------------------------
-       A text link, not a button. The letter's whole case is that the app
-       asks almost nothing of you; a second black pill underneath it would
-       be the page raising its voice at the exact moment the writing stops.
-       ------------------------------------------------------------------ */
-    .install {
-      padding-block: 10px 0;
-      font-size: 1.0625rem;
-    }
-    .install a {
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      text-decoration-thickness: 1px;
-      font-weight: 500;
-    }
-    .install a:hover { text-decoration-thickness: 2px; }
-
     footer {
       margin: 96px 0 0;
       padding: 28px 0 48px;
@@ -299,17 +284,24 @@
     }
     /* Bryndan is a wide face -- noticeably wider than the system stack this
        page used to be set in -- and the header is the one row where that
-       costs something: mark + wordmark + "Install on Shopify" stopped
-       fitting and pushed the whole page sideways. Both ends give a little
-       rather than the pill wrapping or the name coming off the page. */
-    /* Four things in the header now: mark, two text links and the pill.
-       Both links give way together below 640px -- the pill has to survive,
-       and dropping one link but not the other leaves a lopsided header
-       that looks like a bug. The footer carries both, which is what keeps
-       the pages reachable on a phone. 640 rather than 520 because
-       "Pricing" plus "A little inspo" plus the pill in a wide face runs
-       out of room sooner than one link did. */
-    @media (max-width: 640px) {
+       costs something. It used to cost a lot: mark + wordmark + the
+       "Install on Shopify" pill stopped fitting and pushed the whole page
+       sideways, so both links were hidden below 640px and both ends of the
+       row were shrunk below 420px.
+
+       The pill came off on 2026-10-24 and took most of that with it. Three
+       things are left in the row -- mark, "Pricing", "A little inspo" --
+       and measured with the real face they fit all the way down to 320px,
+       with about 32px to spare. So the links no longer drop out at 640px,
+       where the header spent every phone width as a bare wordmark with
+       nothing to click. 340px is a safety net for the narrowest screens
+       and for a reader running a larger base font, not a fit the layout
+       needs. They still go together -- dropping one and not the other
+       reads as a bug -- and the footer carries both either way.
+
+       Measured, not guessed, at 320/360/405/430px. Re-measure if anything
+       joins this row; 32px of slack is not much to spend. */
+    @media (max-width: 340px) {
       .site-nav a.nav-link { display: none; }
     }
 
@@ -318,18 +310,20 @@
        still there when the letter has scrolled past.
 
        It sits one header-padding below the rule -- the same 14px the
-       install pill has ABOVE the rule -- so at the top of the page the
-       pill and the box are evenly spaced either side of the line. That is
-       what `--beta-top` is: the header's own height plus that one gap. If
-       the header's height changes, change it here too, or the box drifts
-       off the line.
+       header row has ABOVE the rule -- so at the top of the page the row
+       and the box are evenly spaced either side of the line. That is what
+       `--beta-top` is: the header's own height plus that one gap. If the
+       header's height changes, change it here too, or the box drifts off
+       the line.
 
-       It is deliberately NOT a second black pill. One filled button is
-       this site's whole allowance for raising its voice and it belongs to
-       install, so this is a white box with a hairline border and the Send
-       is underlined text. A fixed panel is already the loudest thing added
-       to this page since the cards came off it; it does not also need a
-       fill.
+       It is deliberately NOT a black pill, and that did not change when
+       the install pill came off on 2026-10-24. The box is now the only
+       thing on the site asking for anything, so the filled-button
+       allowance is going spare -- and spending it here is exactly the
+       trade this page keeps refusing. A fixed panel is already the
+       loudest thing added since the cards came off; a fill on top of that
+       is the page shouting at someone who came to read a letter. White
+       box, hairline border, Send as underlined text.
 
        The rail is full-width and click-through (`pointer-events: none`) so
        it can borrow `.wrap` and line the box's right edge up with the
@@ -485,10 +479,11 @@
       .site-header .bar { gap: 10px; }
       .brand { gap: 7px; font-size: 1.05rem; }
       .brand img { height: 20px; }
-      .site-nav a.cta { height: 38px; padding: 0 12px; font-size: 0.85rem; }
-      /* The pill shrinks to 38px here, so the rule moves up and the beta
-         box has to move with it: 14 + 38 + 14 + 1. */
-      :root { --header-h: 67px; }
+      /* No --header-h override here any more. It used to drop to 67px
+         because the pill shrank to 38px at this width; with the pill gone
+         the tallest thing in the row is the wordmark, which is shorter
+         than the 44px floor .bar now holds, so the header is the same
+         height at every width. */
     }
   </style>
 </head>
@@ -504,7 +499,6 @@
       <nav class="site-nav">
         <a class="nav-link" href="pricing.html">Pricing</a>
         <a class="nav-link" href="templates.html">A little inspo</a>
-        <a class="cta" href="#install">Install on Shopify</a>
       </nav>
     </div>
   </div>
@@ -584,13 +578,6 @@
     <p>Cheers.</p>
 
     <p class="signoff">— Shep</p>
-  </section>
-
-  <!-- DEAD ANCHOR — `#install` goes nowhere until the app has an App Store
-       listing URL. Two places point at it: this link and the header pill.
-       See CLAUDE.md. -->
-  <section class="install wrap">
-    <a href="#install">Install idiosync on Shopify</a>
   </section>
 
 </main>

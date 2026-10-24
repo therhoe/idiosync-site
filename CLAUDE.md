@@ -36,8 +36,9 @@ than it sounds. Concretely, the homepage has:
 - **one text colour, site-wide** (Shep's call, 2026-10-14). #303030, with
   no muted grey anywhere. `--text-sub` and `--text-dim` are gone, not
   merely unused — the hero sub, the signoff and the footer were all lighter
-  and are not now. The only other text colour on the page is the white
-  inside the black header pill, which has to stay legible. If something
+  and are not now. Since 2026-10-24 this is literally true: the white
+  inside the black header pill was the one exception, and the pill is
+  gone, so #303030 is the only colour the site sets text in. If something
   needs to recede, it recedes by size or position, never by going grey.
 - **the headline and the body are one block, not two.** The sub under the
   headline is the letter's opening line: same ink, same 62ch measure, and
@@ -47,10 +48,12 @@ than it sounds. Concretely, the homepage has:
   mobile padding override for the same reason. Don't put the air back.
 - one typeface: **Bryndan Write**, self-hosted. See "Type" below.
 - nothing animated beyond hover transitions
-- exactly two things to click in the body: the header pill and the text
-  link under the letter, both pointing at the same place. The link is a
-  text link on purpose — a second black pill under the letter would be the
-  page raising its voice the moment the writing stops.
+- **nothing to click in the body at all** (2026-10-24). There used to be
+  two things — the black header pill and a text link under the letter,
+  both pointing at `#install` — and both came off when Shep pointed out
+  the app has no App Store listing to send anyone to. The letter now ends
+  at "— Shep" and that is the end of the page. The only thing on the site
+  asking for anything is the beta box, which is a different ask.
 
 Before adding anything to this site, ask whether the thing you're adding is
 the kind of thing the product refuses to ship. If it is, don't.
@@ -150,10 +153,12 @@ it. The h1 is 400 and leans on scale for hierarchy. **If the page ever
 needs real emphasis, it needs a second font file, not a bolder number.**
 
 **It is wide** — wider than the system stack this page was built against.
-That broke the header on narrow phones (mark + wordmark + pill overflowed
-and pushed the page sideways); there's a `max-width: 420px` block that
-shrinks both ends to fit. Check the header at ~320px after any header
-change.
+That broke the header on narrow phones — mark + wordmark + the install
+pill overflowed and pushed the page sideways — and the `max-width: 420px`
+block that shrinks the brand to fit is what's left of that fight. The pill
+came off on 2026-10-24, so the row is roomy now (it fits at 320px with
+about 32px to spare), but the face is still wide: **check the header at
+~320px after any header change**, and measure rather than eyeball it.
 
 ## Status (2026-10-13)
 
@@ -178,9 +183,16 @@ The copy is Shep's now. The scaffold's draft marketing copy is gone.
   back instead is a real calculator on `pricing.html`. The letter still
   doesn't name a price and the homepage still doesn't ask — that was the
   point of deleting the panel, and it survives.
-- **"Install on Shopify" links go to `#install`**, a dead anchor, because
-  the app has no App Store listing URL yet. Four places now (header pill,
-  the link under the letter); swap both when the listing exists.
+- **There is no install link anywhere any more** (2026-10-24, Shep's
+  call). Every "Install on Shopify" pointed at `#install`, a dead anchor,
+  because the app has no App Store listing URL. Shep's reasoning: the app
+  isn't listed, so the only thing the site can honestly collect right now
+  is beta testers. Removed from all five places — the header pill on
+  `index.html`, `pricing.html` and `templates.html`, plus the text link
+  under the letter and the one under the pricing total. **The beta box is
+  now the site's only call to action.** When the listing exists, this is a
+  new decision about where an install link goes, not a restore — though
+  the old markup and CSS are in git if you want the shape of it.
 - **Two images, both line art.** `paper-plane.png` (hero, 1200px wide) and
   `logo.png` — black strokes on transparency, trimmed to the artwork. Any
   future art has to be transparent line work or it needs its own handling.
@@ -190,10 +202,11 @@ The copy is Shep's now. The scaffold's draft marketing copy is gone.
   name off the page. Sized by height to sit with the type; the heroes site
   sizes its mark by width because that one *is* the lettering. `favicon.png`
   is the same mark, centred on a 180px square with 10% padding.
-- **The header pill is the one loud thing left.** A solid black button on a
-  page that is otherwise a letter and an underline. Kept because it is the
-  only install path above the fold; worth revisiting with Shep rather than
-  quietly changing.
+- **Nothing on the site is loud any more.** The black header pill was the
+  one filled button, and it went with the rest of the install links on
+  2026-10-24. The "one filled button" allowance the CSS comments keep
+  referring to is now unspent — which is not an invitation to spend it on
+  the beta box. See the beta box section.
 - **The plane appears twice** — header mark and hero drawing, the same
   artwork with and without the dashed trail. Deliberate for now; if it
   starts reading as a repeat, the hero drawing is the one to cut, not the
@@ -205,8 +218,9 @@ The copy is Shep's now. The scaffold's draft marketing copy is gone.
 ## Pages
 
 - `index.html` — homepage. Inline `<style>` with the token block at the
-  top. Sections: hero (drawing, headline, sub), the letter, the install
-  link, footer.
+  top. Sections: hero (drawing, headline, sub), the letter, footer. The
+  install link that used to sit between the letter and the footer came
+  off on 2026-10-24.
 - `templates.html` — "A little inspo" (2026-10-14). Six example emails,
   each with a *Copy prompt* button. See below. The **file name stays
   `templates.html`** even though the page is no longer called that — the
@@ -231,20 +245,28 @@ homepage — "I wanna be a beta tester" and an email field — that stays put
 once the letter scrolls past.
 
 It sits one header-padding (14px) below the header rule, which is the same
-gap the install pill has above it, so at the top of the page the two are
+gap the header row has above it, so at the top of the page the two are
 evenly spaced either side of the line. That number is `--header-h` plus
-14px in `index.html`. **`--header-h` is hardcoded** (14 + the 44px pill +
-14 + the 1px rule = 73px, and 67px below 420px where the pill shrinks). If
-the bar's padding or the pill's height ever changes, this has to change
-with it or the box drifts off the line.
+14px in `index.html`.
 
-**It is not a second black pill, deliberately.** One filled button is this
-site's whole allowance for raising its voice and it belongs to install, so
-the box is white with a hairline border and the submit is underlined text.
-A fixed panel is already the loudest thing added to this page since the
-cards came off it. It does not also need a fill — and if it ever gets one,
-the install pill stops being the one loud thing and the header starts
-reading as a toolbar.
+**`--header-h` is 73px** — 14 + a 44px row + 14 + the 1px rule. That 44px
+used to be the install pill, and when the pill came off on 2026-10-24 the
+header would have collapsed to the wordmark (~61px), dragging the rule and
+the beta box up with it. So `.site-header .bar` now carries
+`min-height: var(--header-h)` on all three pages: **the bar IS the token,
+by definition, at every width.** That also retired the 67px override at
+420px, which only existed because the pill shrank there. Box-sizing is
+border-box, so the token is the whole thing. Change the bar's padding and
+this has to change with it or the box drifts off the line.
+
+**It is not a black pill, deliberately — and that got more important on
+2026-10-24, not less.** The install pill came off that day, so the filled
+button is going spare and the box is now the only thing on the site asking
+for anything. Both of those read as arguments for finally filling it in.
+They are not. A fixed panel is already the loudest thing added to this
+page since the cards came off it; a fill on top of that is the page
+shouting at someone who came to read a letter. White box, hairline border,
+underlined Send. If this ever changes it is Shep's call, not a tidy-up.
 
 **Below 920px it collapses** to "beta tester?" and a chevron, and opens on
 tap. 920 is not a phone breakpoint, it is where the letter's 62ch measure
@@ -392,13 +414,12 @@ it; until then, **a change to the header or the tokens has to be made in
 all three files.** See "The header, now that there are four things in it"
 below.
 
-**The homepage now has a third thing to click** (2026-10-14, Shep's call:
-header nav, beside the pill). That is a real amendment to the "exactly two
-things, both pointing at install" rule above. It is plain underlined text,
-not a second pill — one black button is the site's whole allowance for
-raising its voice and it belongs to install. Below 520px the text link
-drops out so the pill survives the narrow header; the footer carries the
-link as well, which is what keeps the page reachable on a phone.
+**The homepage header carries nav links** (2026-10-14, Shep's call), plain
+underlined text rather than pills. They were added beside the install pill
+and outlived it: since 2026-10-24 they are the only things in the header
+besides the wordmark. They drop out together below 340px, and the footer
+carries them on every page, which is what keeps the site reachable on a
+phone.
 
 ## Pricing
 
@@ -462,7 +483,7 @@ the pricing guide.
 
 **The calculator is NOT set in Bryndan** (Shep's call, 2026-10-23: "since
 we are mathing on this, lets make the font less fun"). Everything inside
-the two panels — headings, labels, figures, the install link — is in
+the two panels — headings, labels, figures — is in
 `--font-ui`, the machine's own UI sans. A drawn face is right for a
 letter and wrong for a column of prices: it is wide, it has one weight,
 and its digits are not tabular, so figures in a list don't line up under
@@ -481,19 +502,32 @@ property. Self-hosting Open Sans would pin the look across machines at
 the cost of another font file; judged not worth it, but that is the move
 if the rendering differences ever matter.
 
-**No checkout.** The app's screen has a disabled "Purchases are not
-enabled yet" button; the site has a text link to `#install` instead.
-Buying happens in Shopify, so a button here would be a second black pill
-promising something this page cannot do.
+**No checkout, and since 2026-10-24 no install link either.** The app's
+screen has a disabled "Purchases are not enabled yet" button; the pricing
+page used to answer with a text link to `#install` under the total. That
+link went with the rest of them — the app is not listed, so it promised
+something nothing could deliver. The total is now the last thing in the
+panel, which is honest: buying happens in Shopify, when there is a Shopify
+listing to buy it from.
 
-## The header, now that there are four things in it
+## The header, now that there are three things in it
 
-Mark, "Pricing", "A little inspo", and the install pill. Bryndan is wide
-and this is the row where that costs something, so **both text links drop
-out together below 640px** (it was 520px when there was one link). They go
-together on purpose — dropping one and keeping the other leaves a lopsided
-header that reads as a bug. The footer carries both links on every page,
-which is what keeps the site navigable on a phone.
+Mark, "Pricing", "A little inspo". The install pill was the fourth and
+came off on 2026-10-24. Bryndan is wide and this is the row where that
+costs something, so **both text links drop out together below 340px** —
+but that number is now a safety net, not a fit. It was 640px while the
+pill was in the row, which meant the header spent every phone width as a
+bare wordmark with nothing in it. Measured with the real face, the three
+remaining things fit down to 320px with about 32px to spare, so the links
+stay. 340px is there for the narrowest screens and for a reader running a
+larger base font.
+
+They go together on purpose — dropping one and keeping the other leaves a
+lopsided header that reads as a bug. The footer carries both links on
+every page, which is what keeps the site navigable on a phone.
+
+**32px of slack is not much.** Anything that joins this row needs
+re-measuring at 320px, not eyeballing it.
 
 That breakpoint and the whole chrome block are now duplicated in **three**
 files: `index.html`, `templates.html`, `pricing.html`. A Jekyll layout is
@@ -579,7 +613,7 @@ instead.
 ## Style
 
 Normal capitalization throughout — nav items, buttons, headings
-("Blasts", "Install on Shopify"). Same call as the heroes marketing pages.
+("Blasts", "A little inspo"). Same call as the heroes marketing pages.
 Sentence case for body copy. The brand name is lowercase **idiosync**,
 always, including at the start of a sentence.
 

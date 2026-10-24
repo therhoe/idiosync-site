@@ -81,6 +81,13 @@
       --maxw: 1040px;
       --gutter: 24px;
       --control-height: 44px;
+      /* The header's full height: 14px padding, a 44px row, 14px padding,
+         the 1px rule. .bar holds itself open to exactly this, so the
+         header is the same height on all three pages and at every width.
+         It used to be the install pill that filled the row; the pill came
+         off on 2026-10-24 and the height deliberately stayed. index.html
+         pins its fixed beta box to this number too. */
+      --header-h: 73px;
       --font: "Bryndan Write", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       /* The calculator is set in this instead (Shep's call, 2026-10-23).
          A drawn face is right for a letter and wrong for a column of
@@ -116,6 +123,12 @@
       justify-content: space-between;
       gap: 20px;
       padding-block: 14px;
+      /* The bar IS --header-h tall, by definition, at every width. Until
+         2026-10-24 that height came from the 44px install pill sitting in
+         the row; without it the header would collapse to the wordmark and
+         sit shorter than the homepage's. Border-box, so this is the whole
+         14 + 44 + 14 + 1. Same line on all three pages. */
+      min-height: var(--header-h);
       border-bottom: 1px solid var(--border);
     }
     .brand {
@@ -137,21 +150,6 @@
       white-space: nowrap;
     }
     .site-nav a.nav-link:hover { text-decoration-thickness: 2px; }
-    .site-nav a.cta {
-      display: inline-flex;
-      align-items: center;
-      height: var(--control-height);
-      padding: 0 18px;
-      border-radius: 8px;
-      color: var(--ink-text);
-      background: var(--ink);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      white-space: nowrap;
-      transition: opacity .15s ease;
-    }
-    .site-nav a.cta:hover { opacity: .85; }
 
     /* --- intro --------------------------------------------------------- */
     .intro { padding-block: 64px 0; }
@@ -250,8 +248,10 @@
     }
     .preset:hover { border-color: var(--border-strong); }
     /* Selected is a second ring in the ink, not a fill. A filled button
-       here would read as the thing to press, and the thing to press on
-       this page is install. */
+       here would read as the thing to press, and these presets are a way
+       to ask a question, not the answer to it. (It used to say the thing
+       to press was install; that pill came off on 2026-10-24, and the
+       reasoning holds without it.) */
     .preset[aria-pressed="true"] {
       border-color: var(--ink);
       box-shadow: inset 0 0 0 1px var(--ink);
@@ -296,18 +296,6 @@
     .credits .sum .total { font-size: 1.9rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
     .credits .count { margin: -12px 0 18px; font-size: 1rem; }
 
-    /* A text link, not a filled button -- same call as the one under the
-       letter on the homepage. One black pill is the site's allowance and
-       the header is already spending it. */
-    .buy { margin: 22px 0 0; font-size: 1rem; }
-    .buy a {
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      text-decoration-thickness: 1px;
-      font-weight: 500;
-    }
-    .buy a:hover { text-decoration-thickness: 2px; }
-
     footer {
       margin: 96px 0 0;
       padding: 28px 0 48px;
@@ -329,18 +317,25 @@
       .intro { padding-top: 48px; }
       .panel { padding: 20px; }
     }
-    /* Bryndan is wide, and this page puts a third item in the nav. Both
-       text links drop out together below 640px so the pill survives; the
-       footer carries them, which is what keeps the pages reachable on a
-       phone. */
-    @media (max-width: 640px) {
+    /* Bryndan is wide. This row used to carry a black install pill as well,
+       which is why both text links were hidden below 640px and both ends
+       of the row were shrunk below 420px. The pill came off on 2026-10-24
+       (no App Store listing to send anyone to). Measured with the real
+       face, the three things left in the row fit down to 320px with about
+       32px to spare, so the links no longer drop out at 640px -- which
+       left the header a bare wordmark at every phone width. 340px is a
+       safety net for the narrowest screens and for a larger base font,
+       not a fit the layout needs. They still go together, because
+       dropping one and not the other reads as a bug, and the footer
+       carries both either way. Same breakpoint and same reasoning on all
+       three pages -- change one, change all three. */
+    @media (max-width: 340px) {
       .site-nav a.nav-link { display: none; }
     }
     @media (max-width: 420px) {
       .site-header .bar { gap: 10px; }
       .brand { gap: 7px; font-size: 1.05rem; }
       .brand img { height: 20px; }
-      .site-nav a.cta { height: 38px; padding: 0 12px; font-size: 0.85rem; }
       .presets { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
@@ -357,7 +352,6 @@
       <nav class="site-nav">
         <a class="nav-link" href="pricing.html">Pricing</a>
         <a class="nav-link" href="templates.html">A little inspo</a>
-        <a class="cta" href="#install">Install on Shopify</a>
       </nav>
     </div>
   </div>
@@ -427,10 +421,6 @@
       </div>
       <p class="note">USD, before any applicable tax</p>
 
-      <!-- DEAD ANCHOR — `#install` goes nowhere until the app has an App
-           Store listing URL. Three places point at it now: the header
-           pill, the link under the letter on the homepage, and this. -->
-      <p class="buy"><a href="#install">Install idiosync on Shopify</a></p>
     </div>
 
   </section>
