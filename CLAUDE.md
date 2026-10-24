@@ -501,6 +501,37 @@ still the right fix and still can't be eyeballed on the static preview
 server. Until then, a change to the header or the tokens is a change to
 three files.
 
+## Link previews (2026-10-24)
+
+All three pages had a `<title>` and a meta description and nothing else, so
+a pasted link came out as grey text with no image — X showed none at all.
+Every page now carries a full Open Graph + Twitter block, inserted right
+after `canonical`.
+
+- **`og:title` / `og:description` mirror the page's own `<title>` and meta
+  description, word for word.** They are duplicated on purpose rather than
+  written fresh: two descriptions of the same page drift. Change one,
+  change the other.
+- **URLs in the block are absolute** (`https://idiosync.site/...`) — the
+  opposite of the rule for everything else on the page. A scraper has no
+  base to resolve a relative path against. Now correct, since the apex is
+  live; on the old project URL these would have pointed at a 404.
+- **One card for the whole site**: `assets/social-card.png`, 1200×630,
+  drawn by `.claude/scripts/build-social-card.py` (needs `pillow`). White
+  ground, the hero plane bottom-right, the mark and wordmark top-left, and
+  Shep's headline set in the source Bryndan TTF — the page's own furniture,
+  one ink, nothing added. A card with a gradient or a badge on it would be
+  the page selling harder in the one place it does not control, which is
+  the mistake the homepage already deleted once.
+- The plane is **small and low in the card on purpose** — its dashed trail
+  climbs up and left out of the nose and lands in the headline at any
+  larger size. Re-render and look at the PNG after touching either.
+- PNG, composited onto opaque white, not the transparent `paper-plane.png`
+  and not SVG: scrapers don't render SVG, and X in dark mode would draw the
+  black strokes on near-black.
+- Per-page cards were considered and skipped — three images to keep in sync
+  for a thumbnail nobody studies.
+
 ## Design tokens
 
 Lifted from the app UI (`~/idio UI/index.html`) so the site and the app read
